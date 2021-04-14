@@ -1,4 +1,11 @@
 @import '../../../styles/settings.scss';
 
-// .root {
-// }
+.root {
+  .menu {
+    justify-content: space-between;
+
+    .icon {
+      margin-left: $main-spacing;
+    }
+  }
+}

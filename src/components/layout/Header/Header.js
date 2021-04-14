@@ -2,21 +2,36 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import clsx from 'clsx';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUser } from '@fortawesome/free-regular-svg-icons';
+
+import styles from './Header.module.scss';
 
 // import { connect } from 'react-redux';
 // import { reduxSelector, reduxActionCreator } from '../../../redux/exampleRedux.js';
 
-import styles from './Header.module.scss';
-
-const Component = ({className, children}) => (
+const Component = ({className}) => (
   <div className={clsx(className, styles.root)}>
-    <h2>Header</h2>
-    {children}
+    <AppBar position="static">
+      <Toolbar className={styles.menu}>
+        <Typography variant="h6">
+          Bulletin Board
+        </Typography>
+        <Button color="inherit" variant="outlined" href="https://google.com">
+          Login
+          <FontAwesomeIcon icon={faUser} className={styles.icon}/>
+        </Button>
+      </Toolbar>
+    </AppBar>
   </div>
 );
 
 Component.propTypes = {
-  children: PropTypes.node,
   className: PropTypes.string,
 };
 

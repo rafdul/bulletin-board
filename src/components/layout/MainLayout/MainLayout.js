@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {Header} from '../Header/Header'
 
 import clsx from 'clsx';
 
@@ -11,7 +12,7 @@ import styles from './MainLayout.module.scss';
 const Component = ({className, children}) => (
   <div className={clsx(className, styles.root)}>
     <div className={styles.container}>
-      <h2>Add your announcement</h2>
+      <Header/>
       {children}
     </div>
   </div>
