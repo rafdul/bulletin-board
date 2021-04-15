@@ -1,4 +1,33 @@
 @import '../../../styles/settings.scss';
 
-// .root {
-// }
+.root {
+  .announcement {
+    padding: $main-spacing;
+  }
+
+  .card{
+    display: flex;
+    justify-content: space-between;
+    flex-basis: 100%;
+    flex-wrap: wrap;
+
+    &__item {
+      flex-basis: 30%;
+      margin: $main-spacing;
+      flex-grow: 1;
+
+      .image {
+        max-height: 40vh;
+      }
+
+      .price {
+        margin-top: $main-spacing;
+      }
+    }
+
+    &__btn {
+      justify-content: center;
+    }
+
+  }
+}
