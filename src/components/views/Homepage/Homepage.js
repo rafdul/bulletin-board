@@ -1,5 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
+
+import {Switcher} from '../../common/Switcher/Switcher';
 
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -8,54 +10,70 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link';
 
 import clsx from 'clsx';
 
 import { connect } from 'react-redux';
 // import { reduxSelector, reduxActionCreator } from '../../../redux/exampleRedux.js';
 import { getAll } from '../../../redux/postsRedux';
+// import { getStatusUser } from '../../../redux/statusUserRedux';
 
 import styles from './Homepage.module.scss';
 
-const Component = ({className, postsAll}) => (
-  <div className={clsx(className, styles.root)}>
-    {/* <h2>Homepage</h2> */}
-    <div className={styles.announcement}>Add announcement</div>
-    <div className={styles.card}>
-      {postsAll.map(post => (
-        <Card key={post.id} className={styles.card__item}>
-          <CardActionArea>
-            <CardMedia
-              className={styles.image}
-              component="img"
-              // src={post.image}
-              image={post.image}
-              title={post.title}
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="h2">
-                {post.title}
-              </Typography>
-              <Typography variant="body2" color="textSecondary" component="p">
-                {post.content}
-              </Typography>
-              <div className={styles.price}>
-                <Typography component="p" variant="subtitle2">Price: {post.price}</Typography>
-                <Typography component="p" variant="subtitle2">Location: {post.location}</Typography>
-              </div>
-            </CardContent>
-          </CardActionArea>
-          <CardActions className={styles.card__btn}>
-            <Button size="small" color="primary">
-              Show more
-            </Button>
-          </CardActions>
-        </Card>
-      ))}
 
+const Component = ({ className, postsAll }) => {
+
+  const [ statusTrue , setStatusUser ] = useState(true);
+  // console.log(' statusTrue', statusTrue);
+
+  return (
+    <div className={clsx(className, styles.root)}>
+      <Switcher setStatusUser={setStatusUser}/>
+
+      <div className={styles.announcement}>
+        {statusTrue
+          ?
+          <Link href="#">Add announcement</Link>
+          :
+          <Link href="#">Login</Link>
+        }
+      </div>
+      <div className={styles.card}>
+        {postsAll.map(post => (
+          <Card key={post.id} className={styles.card__item}>
+            <CardActionArea>
+              <CardMedia
+                className={styles.image}
+                component="img"
+                image={post.image}
+                title={post.title}
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="h2">
+                  {post.title}
+                </Typography>
+                <Typography variant="body2" color="textSecondary" component="p">
+                  {post.content}
+                </Typography>
+                <div className={styles.price}>
+                  <Typography component="p" variant="subtitle2">Price: {post.price}</Typography>
+                  <Typography component="p" variant="subtitle2">Location: {post.location}</Typography>
+                </div>
+              </CardContent>
+            </CardActionArea>
+            <CardActions className={styles.card__btn}>
+              <Button size="small" color="primary">
+                Show more
+              </Button>
+            </CardActions>
+          </Card>
+        ))}
+
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 Component.propTypes = {
   className: PropTypes.string,
@@ -74,10 +92,12 @@ Component.propTypes = {
       location: PropTypes.string,
     })
   ),
+  // isLogged: PropTypes.bool,
 };
 
 const mapStateToProps = state => ({
   postsAll: getAll(state),
+  // isLogged: getStatusUser(state),
   // someProp: reduxSelector(state),
 });
 

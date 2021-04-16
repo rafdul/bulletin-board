@@ -3,7 +3,7 @@ export const initialState = {
     data: [
       {
         id: 1,
-        title: 'Advert 1',
+        title: 'Lorem ipsum 1',
         content: 'Nulla ac turpis rutrum pede sit amet sapien eu odio. Morbi a blandit quam eros ac turpis egestas. Suspendisse ac quam in dictum eget, elementum nunc. Nulla venenatis arcu',
         datePublication: '2021.03.12',
         dateLastUpdate: '2021.03.27',
@@ -16,7 +16,7 @@ export const initialState = {
       },
       {
         id: 2,
-        title: 'Advert 2',
+        title: 'Lorem ipsum 2',
         content: 'Nulla ac turpis rutrum pede sit amet sapien eu odio. Morbi a blandit quam eros ac turpis egestas. Suspendisse ac quam in dictum eget, elementum nunc. Nulla venenatis arcu',
         datePublication: '2021.02.23',
         dateLastUpdate: '2021.04.11',
@@ -29,7 +29,7 @@ export const initialState = {
       },
       {
         id: 3,
-        title: 'Advert 3',
+        title: 'Lorem ipsum 3',
         content: 'Nulla ac turpis rutrum pede sit amet sapien eu odio. Morbi a blandit quam eros ac turpis egestas. Suspendisse ac quam in dictum eget, elementum nunc. Nulla venenatis arcu',
         datePublication: '2021.01.29',
         dateLastUpdate: '2021.01.29',
@@ -42,7 +42,7 @@ export const initialState = {
       },
       {
         id: 4,
-        title: 'Advert 4',
+        title: 'Lorem ipsum 4',
         content: 'Nulla ac turpis rutrum pede sit amet sapien eu odio. Morbi a blandit quam eros ac turpis egestas. Suspendisse ac quam in dictum eget, elementum nunc. Nulla venenatis arcu',
         datePublication: '2021.01.23',
         dateLastUpdate: '2021.04.15',

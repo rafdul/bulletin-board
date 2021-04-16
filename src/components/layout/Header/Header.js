@@ -7,7 +7,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-regular-svg-icons';
 
 import styles from './Header.module.scss';
@@ -33,6 +33,7 @@ const Component = ({className}) => (
 
 Component.propTypes = {
   className: PropTypes.string,
+  setIsLogged: PropTypes.func,
 };
 
 // const mapStateToProps = state => ({
