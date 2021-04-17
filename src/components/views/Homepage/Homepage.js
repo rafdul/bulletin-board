@@ -40,7 +40,7 @@ const Component = ({ className, postsAll }) => {
           <div className={styles.card}>
             {postsAll.map(post => (
               <Card key={post.id} className={styles.card__item}>
-                <CardActionArea>
+                <CardActionArea href={`/post/${post.id}`}>
                   <CardMedia
                     className={styles.image}
                     component="img"
@@ -61,7 +61,7 @@ const Component = ({ className, postsAll }) => {
                   </CardContent>
                 </CardActionArea>
                 <CardActions className={styles.card__btn}>
-                  <Button size="small" color="primary">
+                  <Button size="small" color="primary" href={`/post/${post.id}`} >
                     Show more
                   </Button>
                 </CardActions>
@@ -78,7 +78,7 @@ Component.propTypes = {
   className: PropTypes.string,
   postsAll: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number,
+      id: PropTypes.string,
       title: PropTypes.string,
       content: PropTypes.string,
       datePublication: PropTypes.string,

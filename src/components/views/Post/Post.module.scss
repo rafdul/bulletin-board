@@ -1,4 +1,35 @@
 @import '../../../styles/settings.scss';
 
-// .root {
-// }
+.root {
+  .postContainer {
+    .postItem {
+      &__link {
+        text-align: center;
+      }
+
+      &__imageBox {
+        .postImage {
+          width: 100%;
+        }
+      }
+
+      &__content {
+        padding-top: $base-size;
+
+        .icon {
+          margin: 0 $base-size / 2;
+        }
+
+        span {
+          margin-right: $base-size;
+        }
+      }
+
+      &__group {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+      }
+    }
+  }
+}

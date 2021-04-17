@@ -27,7 +27,6 @@ const Component = ({className, children}) => {
         <StatusContext.Provider value={{statusTrue}}>
           {children}
         </StatusContext.Provider>
-        {console.log('children', children)}
       </div>
     </div>
   );

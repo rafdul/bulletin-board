@@ -2,7 +2,7 @@ export const initialState = {
   posts: {
     data: [
       {
-        id: 1,
+        id: '1as',
         title: 'Lorem ipsum 1',
         content: 'Nulla ac turpis rutrum pede sit amet sapien eu odio. Morbi a blandit quam eros ac turpis egestas. Suspendisse ac quam in dictum eget, elementum nunc. Nulla venenatis arcu',
         datePublication: '2021.03.12',
@@ -15,7 +15,7 @@ export const initialState = {
         location: 'Warsaw',
       },
       {
-        id: 2,
+        id: '2sd',
         title: 'Lorem ipsum 2',
         content: 'Nulla ac turpis rutrum pede sit amet sapien eu odio. Morbi a blandit quam eros ac turpis egestas. Suspendisse ac quam in dictum eget, elementum nunc. Nulla venenatis arcu',
         datePublication: '2021.02.23',
@@ -28,7 +28,7 @@ export const initialState = {
         location: 'London',
       },
       {
-        id: 3,
+        id: '3jh',
         title: 'Lorem ipsum 3',
         content: 'Nulla ac turpis rutrum pede sit amet sapien eu odio. Morbi a blandit quam eros ac turpis egestas. Suspendisse ac quam in dictum eget, elementum nunc. Nulla venenatis arcu',
         datePublication: '2021.01.29',
@@ -41,7 +41,7 @@ export const initialState = {
         location: 'Berlin',
       },
       {
-        id: 4,
+        id: '4fj',
         title: 'Lorem ipsum 4',
         content: 'Nulla ac turpis rutrum pede sit amet sapien eu odio. Morbi a blandit quam eros ac turpis egestas. Suspendisse ac quam in dictum eget, elementum nunc. Nulla venenatis arcu',
         datePublication: '2021.01.23',
