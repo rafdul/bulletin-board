@@ -15,17 +15,24 @@ import styles from './Header.module.scss';
 // import { connect } from 'react-redux';
 // import { reduxSelector, reduxActionCreator } from '../../../redux/exampleRedux.js';
 
-const Component = ({className}) => (
+const Component = ({className, statusTrue}) => (
   <div className={clsx(className, styles.root)}>
     <AppBar position="static">
       <Toolbar className={styles.menu}>
         <Typography variant="h6">
           Bulletin Board
         </Typography>
-        <Button color="inherit" variant="outlined" href="https://google.com">
-          Login
-          <FontAwesomeIcon icon={faUser} className={styles.icon}/>
-        </Button>
+        <div>
+          {statusTrue
+            ?
+            'My announcements'
+            :
+            <Button color="inherit" variant="outlined" href="https://google.com">
+              Login
+              <FontAwesomeIcon icon={faUser} className={styles.icon}/>
+            </Button>
+          }
+        </div>
       </Toolbar>
     </AppBar>
   </div>
@@ -34,6 +41,7 @@ const Component = ({className}) => (
 Component.propTypes = {
   className: PropTypes.string,
   setIsLogged: PropTypes.func,
+  statusTrue: PropTypes.bool,
 };
 
 // const mapStateToProps = state => ({

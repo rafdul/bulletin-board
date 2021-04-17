@@ -1,5 +1,6 @@
 import React from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { BrowserRouter, Switch, Route} from 'react-router-dom';
 import { Provider } from 'react-redux';
 
 import { createMuiTheme, StylesProvider, ThemeProvider } from '@material-ui/core/styles';
@@ -20,7 +21,7 @@ const theme = createMuiTheme({
   },
 });
 
-const App = () => (
+const App = (props) => (
   <Provider store={store}>
     <BrowserRouter>
       <StylesProvider injectFirst>
@@ -28,7 +29,8 @@ const App = () => (
           <CssBaseline />
           <MainLayout>
             <Switch>
-              <Route exact path='/' component={Homepage} />
+              {/* <Route exact path='/' component={Homepage} /> */}
+              <Route exact path='/' render={(props) => <Homepage {...props}/>} />
               <Route exact path='/post/add' component={PostAdd} />
               <Route exact path='/post/:id' component={Post} />
               <Route exact path='/post/:id/edit' component={PostEdit} />
@@ -40,5 +42,10 @@ const App = () => (
     </BrowserRouter>
   </Provider>
 );
+
+App.propTypes = {
+  statusTrue: PropTypes.bool,
+};
+
 
 export { App };
