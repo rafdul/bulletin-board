@@ -8,6 +8,18 @@
       &__item {
         margin: $base-size auto;
       }
+
+      &__textError {
+        color: $color-text-error;
+      }
+
+      &__link{
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
     }
 
   }

@@ -53,12 +53,12 @@ const Component = ({className}) => (
               </Paper>
               :
               <Paper className={styles.paperCard}>
-                <h2>Only for logged user</h2>
+                <h2 className={styles.paperCard__textError}>Only for logged user</h2>
                 <p>
-                  <Link >Login</Link>
+                  <Link className={styles.paperCard__link}>Login</Link>
                 </p>
                 <p>
-                  <Link to={'/'}>Back to homepage</Link>
+                  <Link to={'/'} className={styles.paperCard__link}>Back to homepage</Link>
                 </p>
               </Paper>
             }
