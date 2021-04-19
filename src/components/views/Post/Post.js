@@ -15,26 +15,24 @@ import clsx from 'clsx';
 
 import { connect } from 'react-redux';
 // import { reduxSelector, reduxActionCreator } from '../../../redux/exampleRedux.js';
-import { getAll } from '../../../redux/postsRedux';
+import { getAll, getOnePost } from '../../../redux/postsRedux';
 
 import styles from './Post.module.scss';
 
 
-const Component = ({className, postsAll, match}) => {
+const Component = ({className, postById}) => {
 
-  const findPost = postsAll.find(el => el.id === match.params.id);
-  {console.log('findPost:', findPost)}
+  // console.log('postById:', postById);
 
   return(
     <StatusContext.Consumer>
       { value => (
         <div className={clsx(className, styles.root)}>
-          {console.log('match:', match)}
-          <h2>Post: {findPost.title}</h2>
+          <h2>Post: {postById.title}</h2>
           <Grid container spacing={3} className={styles.postContainer}>
             <Grid item xs={12} sm={5} className={styles.postItem}>
               <div className={styles.postItem__imageBox}>
-                <img src={findPost.image} alt={findPost.title} className={styles.postImage}/>
+                <img src={postById.image} alt={postById.title} className={styles.postImage}/>
               </div>
             </Grid>
             <Grid item xs={12} sm={7} className={styles.postItem}>
@@ -50,26 +48,26 @@ const Component = ({className, postsAll, match}) => {
                   }
                   <div className={styles.postItem__group}>
                     <Typography color="textSecondary" variant="body2">
-                      Status: {findPost.status}
+                      Status: {postById.status}
                     </Typography>
                     <Typography variant="h5">
-                      {findPost.price}
+                      {postById.price}
                     </Typography>
                   </div>
                   <Typography variant="subtitle1" className={styles.postItem__content}>
-                    {findPost.content}
+                    {postById.content}
                   </Typography>
                   <Typography variant="subtitle1" className={styles.postItem__content}>
                     Contact
                     <div>
-                      <FontAwesomeIcon icon={faAt} className={styles.icon}/> {findPost.email}<br/>
-                      <FontAwesomeIcon icon={faPhoneAlt} className={styles.icon}/> {findPost.phone}<br/>
-                      <FontAwesomeIcon icon={faMapMarkedAlt} className={styles.icon}/> {findPost.location}
+                      <FontAwesomeIcon icon={faAt} className={styles.icon}/> {postById.email}<br/>
+                      <FontAwesomeIcon icon={faPhoneAlt} className={styles.icon}/> {postById.phone}<br/>
+                      <FontAwesomeIcon icon={faMapMarkedAlt} className={styles.icon}/> {postById.location}
                     </div>
                   </Typography>
                   <Typography color="textSecondary" variant="body2" className={styles.postItem__content}>
-                    <span>Publication: {findPost.datePublication}</span>
-                    <span>Updated: {findPost.dateLastUpdate}</span>
+                    <span>Publication: {postById.datePublication}</span>
+                    <span>Updated: {postById.dateLastUpdate}</span>
                   </Typography>
                 </CardContent>
               </Card>
@@ -85,25 +83,25 @@ Component.propTypes = {
   className: PropTypes.string,
   match: PropTypes.object,
   params: PropTypes.object,
-  postsAll: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      title: PropTypes.string,
-      content: PropTypes.string,
-      datePublication: PropTypes.string,
-      dateLastUpdate: PropTypes.string,
-      email: PropTypes.string,
-      status: PropTypes.string,
-      image: PropTypes.string,
-      price: PropTypes.string,
-      phone: PropTypes.string,
-      location: PropTypes.string,
-    })
-  ),
+  postById: PropTypes.shape({
+    id: PropTypes.string,
+    title: PropTypes.string,
+    content: PropTypes.string,
+    datePublication: PropTypes.string,
+    dateLastUpdate: PropTypes.string,
+    email: PropTypes.string,
+    status: PropTypes.string,
+    image: PropTypes.string,
+    price: PropTypes.string,
+    phone: PropTypes.string,
+    location: PropTypes.string,
+  }),
+  // postById: PropTypes.node,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, props) => ({
   postsAll: getAll(state),
+  postById: getOnePost(state, props.match.params.id),
 });
 
 // const mapDispatchToProps = dispatch => ({

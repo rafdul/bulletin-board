@@ -9,6 +9,10 @@
         margin: $base-size auto;
       }
 
+      &__btn {
+        margin-top: $base-size;
+      }
+
       &__textError {
         color: $color-text-error;
       }
