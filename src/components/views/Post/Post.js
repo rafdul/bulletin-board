@@ -96,7 +96,6 @@ Component.propTypes = {
     phone: PropTypes.string,
     location: PropTypes.string,
   }),
-  // postById: PropTypes.node,
 };
 
 const mapStateToProps = (state, props) => ({

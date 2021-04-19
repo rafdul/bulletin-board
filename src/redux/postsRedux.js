@@ -1,6 +1,12 @@
 /* selectors */
 export const getAll = ({posts}) => posts.data;
-export const getOnePost = ({posts}, id) => posts.data.find(post => post.id == id);
+export const getOnePost = ({posts}, id) => {
+  const filtered = posts.data.filter(post => post.id === id);
+  return filtered.length ? filtered[0] : {
+    id: 'none',
+    title: 'not found product',
+  };
+};
 
 /* action name creator */
 const reducerName = 'posts';
