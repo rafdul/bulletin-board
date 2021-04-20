@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAt, faPhoneAlt, faMapMarkedAlt } from '@fortawesome/free-solid-svg-icons';
 
@@ -9,7 +11,7 @@ import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
+import LinkUI from '@material-ui/core/Link';
 
 import clsx from 'clsx';
 
@@ -20,7 +22,7 @@ import { getAll, getOnePost } from '../../../redux/postsRedux';
 import styles from './Post.module.scss';
 
 
-const Component = ({className, postById}) => {
+const Component = ({className, postById, props}) => {
 
   // console.log('postById:', postById);
 
@@ -41,7 +43,7 @@ const Component = ({className, postById}) => {
                   {value.statusTrue
                     ?
                     <div className={styles.postItem__link}>
-                      <Link href="#" variant="subtitle1" color="secondary" >Edit post</Link>
+                      <Link component={LinkUI} to={`/post/${postById.id}/edit`} variant="subtitle1" color="secondary" >Edit post</Link>
                     </div>
                     :
                     null
@@ -81,6 +83,7 @@ const Component = ({className, postById}) => {
 
 Component.propTypes = {
   className: PropTypes.string,
+  props: PropTypes.object,
   match: PropTypes.object,
   params: PropTypes.object,
   postById: PropTypes.shape({

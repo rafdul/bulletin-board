@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+
 
 import clsx from 'clsx';
 import AppBar from '@material-ui/core/AppBar';
@@ -20,7 +22,7 @@ const Component = ({className, statusTrue}) => (
     <AppBar position="static">
       <Toolbar className={styles.menu}>
         <Typography variant="h6">
-          Bulletin Board
+          <Link to={'/'} className={styles.menu__logo}>Bulletin Board</Link>
         </Typography>
         <div>
           {statusTrue

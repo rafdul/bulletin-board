@@ -19,11 +19,45 @@ import clsx from 'clsx';
 
 import { connect } from 'react-redux';
 // import { reduxSelector, reduxActionCreator } from '../../../redux/exampleRedux.js';
-import { getAll, getOnePost } from '../../../redux/postsRedux';
+import { getOnePost, editPost } from '../../../redux/postsRedux';
 
 import styles from './PostEdit.module.scss';
 
 class Component extends React.Component {
+  state = {
+    post: {
+      id: this.props.postById.id,
+      title: this.props.postById.title,
+      content: this.props.postById.content,
+      price: this.props.postById.price,
+      image: this.props.postById.image,
+      email: this.props.postById.email,
+      location: this.props.postById.location,
+      phone: this.props.postById.phone,
+      status: this.props.postById.status,
+      datePublication: this.props.postById.datePublication,
+      dateLastUpdate: this.props.postById.dateLastUpdate,
+    },
+  };
+
+  handleChange = (event) => {
+    const { post } = this.state;
+
+    this.setState({ post: { ...post, [event.target.name]: event.target.value } });
+    console.log('this.state', this.state);
+  };
+
+  submitForm = (event) => {
+    event.preventDefault();
+    const { post } = this.state;
+    const { editPost } = this.props;
+
+    post.dateLastUpdate = new Date().toISOString();
+    editPost(post);
+
+    console.log('addPost', editPost)
+  }
+
 
   render() {
     const { className, postById } = this.props;
@@ -39,18 +73,18 @@ class Component extends React.Component {
                 {value.statusTrue
                   ?
                   <Paper className={styles.paperCard}>
-                    <form>
+                    <form onSubmit={this.submitForm}>
                       <Typography variant="h6" gutterBottom align="center">
                         Edit your announcement
                       </Typography>
                       <Grid item xs={12} sm={9} className={styles.paperCard__item}>
-                        <TextField required id={postById.title} value={postById.title} name="title" label="Title" fullWidth onChange={this.handleChange} helperText="min. 10 characters" className={styles.textInput}/>
+                        <TextField required id={postById.title} defaultValue={postById.title} name="title" label="Title" fullWidth onChange={this.handleChange} helperText="min. 10 characters" className={styles.textInput}/>
                       </Grid>
                       <Grid item xs={12} sm={9} className={styles.paperCard__item}>
-                        <TextField required id={postById.content} value={postById.content} name="content" label="Describe" fullWidth multiline onChange={this.handleChange} helperText="min. 20 characters"/>
+                        <TextField required id={postById.content} defaultValue={postById.content} name="content" label="Describe" fullWidth multiline onChange={this.handleChange} helperText="min. 20 characters"/>
                       </Grid>
                       <Grid item xs={12} sm={9} className={styles.paperCard__item}>
-                        <TextField required id={postById.price} value={postById.price} name="price" label="Price ($)" fullWidth type="number" onChange={this.handleChange}/>
+                        <TextField required id={postById.price} defaultValue={postById.price} name="price" label="Price ($)" fullWidth type="number" onChange={this.handleChange}/>
                       </Grid>
                       <Grid item xs={12} sm={9} className={styles.paperCard__item}>
                         <TextField required id={postById.email} value={postById.email} name="email" label="Email address" fullWidth onChange={this.handleChange} />
@@ -122,17 +156,19 @@ Component.propTypes = {
     phone: PropTypes.string,
     location: PropTypes.string,
   }),
+  addPost: PropTypes.func,
+  editPost: PropTypes.func,
 };
 
 const mapStateToProps = (state, props) => ({
   postById: getOnePost(state, props.match.params.id),
 });
 
-// const mapDispatchToProps = dispatch => ({
-//   someAction: arg => dispatch(reduxActionCreator(arg)),
-// });
+const mapDispatchToProps = dispatch => ({
+  editPost: (post) => dispatch(editPost(post)),
+});
 
-const Container = connect(mapStateToProps)(Component);
+const Container = connect(mapStateToProps, mapDispatchToProps)(Component);
 
 export {
   // Component as PostEdit,

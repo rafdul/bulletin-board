@@ -4,6 +4,11 @@
   .menu {
     justify-content: space-between;
 
+    &__logo {
+      color: #fff;
+      text-decoration: none;
+    }
+
     .icon {
       margin-left: $main-spacing;
     }
