@@ -3,6 +3,12 @@
 .root {
   .announcement {
     padding: $main-spacing;
+    text-align: center;
+
+    &__link {
+      color: $color-text;
+      text-decoration: none;
+    }
   }
 
   .card{

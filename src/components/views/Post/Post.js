@@ -12,6 +12,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import LinkUI from '@material-ui/core/Link';
+import Fab from '@material-ui/core/Fab';
 
 import clsx from 'clsx';
 
@@ -43,7 +44,9 @@ const Component = ({className, postById, props}) => {
                   {value.statusTrue
                     ?
                     <div className={styles.postItem__link}>
-                      <Link component={LinkUI} to={`/post/${postById.id}/edit`} variant="subtitle1" color="secondary" >Edit post</Link>
+                      <Link component={LinkUI} to={`/post/${postById.id}/edit`} variant="subtitle1" color="secondary">
+                        <Fab size="small" color="secondary" aria-label="add" variant="extended">Edit post</Fab>
+                      </Link>
                     </div>
                     :
                     null

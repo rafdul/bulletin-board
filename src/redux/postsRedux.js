@@ -4,7 +4,7 @@ export const getOnePost = ({posts}, id) => {
   const filtered = posts.data.filter(post => post.id === id);
   return filtered.length ? filtered[0] : {
     id: 'none',
-    title: 'not found product',
+    title: 'not found post',
   };
 };
 

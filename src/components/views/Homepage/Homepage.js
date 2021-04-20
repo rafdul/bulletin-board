@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 import StatusContext from '../../../context/StatusContext';
 
@@ -10,7 +11,8 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
+import LinkUI from '@material-ui/core/Link';
+import Fab from '@material-ui/core/Fab';
 
 import clsx from 'clsx';
 
@@ -32,9 +34,15 @@ const Component = ({ className, postsAll }) => {
           <div className={styles.announcement}>
             {value.statusTrue
               ?
-              <Link href="#">Add announcement</Link>
+              <Link to={'/post/add'} className={styles.announcement__link}>
+                <Fab size="small" color="primary" aria-label="add" variant="extended">Add announcement</Fab>
+                {/* Add announcement */}
+              </Link>
+
               :
-              <Link href="#">Login</Link>
+              <LinkUI href="#" className={styles.announcement__link}>
+                <Fab size="small" color="secondary" aria-label="add" variant="extended">Login</Fab>
+              </LinkUI>
             }
           </div>
           <div className={styles.card}>

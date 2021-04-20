@@ -44,8 +44,14 @@ class Component extends React.Component {
     const { post } = this.state;
 
     this.setState({ post: { ...post, [event.target.name]: event.target.value } });
-    console.log('this.state', this.state);
   };
+
+  handleImage = (file) => {
+    const { post } = this.state;
+
+    if (file) this.setState({ post: { ...post, [post.image]: file[0] } });
+    else this.setState({ post: { ...post, image: null } });
+  }
 
   submitForm = (event) => {
     event.preventDefault();
@@ -55,13 +61,13 @@ class Component extends React.Component {
     post.dateLastUpdate = new Date().toISOString();
     editPost(post);
 
-    console.log('addPost', editPost)
+    // console.log('addPost', editPost);
   }
 
 
   render() {
     const { className, postById } = this.props;
-    console.log('postById', postById);
+    const {post} = this.state;
 
     return(
       <StatusContext.Consumer>
@@ -98,7 +104,7 @@ class Component extends React.Component {
                       <Grid item xs={12} sm={9} className={styles.paperCard__item}>
                         <FormControl required fullWidth variant="filled">
                           <InputLabel id="demo-simple-select-label">Status</InputLabel>
-                          <Select labelId="demo-simple-select-label" fullWidth name="status" value={postById.status} onChange={this.handleChange} >
+                          <Select labelId="demo-simple-select-label" fullWidth name="status" value={post.status} onChange={this.handleChange} >
                             <MenuItem value="draft">Draft</MenuItem>
                             <MenuItem value="published">Published</MenuItem>
                             <MenuItem value="finished">Finished</MenuItem>
