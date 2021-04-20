@@ -84,22 +84,22 @@ class Component extends React.Component {
                         Edit your announcement
                       </Typography>
                       <Grid item xs={12} sm={9} className={styles.paperCard__item}>
-                        <TextField required id={postById.title} defaultValue={postById.title} name="title" label="Title" fullWidth onChange={this.handleChange} helperText="min. 10 characters" className={styles.textInput}/>
+                        <TextField required defaultValue={postById.title} name="title" label="Title" fullWidth onChange={this.handleChange} helperText="min. 10 characters" className={styles.textInput}/>
                       </Grid>
                       <Grid item xs={12} sm={9} className={styles.paperCard__item}>
-                        <TextField required id={postById.content} defaultValue={postById.content} name="content" label="Describe" fullWidth multiline onChange={this.handleChange} helperText="min. 20 characters"/>
+                        <TextField required defaultValue={postById.content} name="content" label="Describe" fullWidth multiline onChange={this.handleChange} helperText="min. 20 characters"/>
                       </Grid>
                       <Grid item xs={12} sm={9} className={styles.paperCard__item}>
-                        <TextField required id={postById.price} defaultValue={postById.price} name="price" label="Price ($)" fullWidth type="number" onChange={this.handleChange}/>
+                        <TextField required defaultValue={postById.price} name="price" label="Price ($)" fullWidth type="number" onChange={this.handleChange}/>
                       </Grid>
                       <Grid item xs={12} sm={9} className={styles.paperCard__item}>
-                        <TextField required id={postById.email} value={postById.email} name="email" label="Email address" fullWidth onChange={this.handleChange} />
+                        <TextField required defaultValue={postById.email} name="email" label="Email address" fullWidth onChange={this.handleChange} />
                       </Grid>
                       <Grid item xs={12} sm={9} className={styles.paperCard__item}>
-                        <TextField id={postById.phone} value={postById.phone} name="phone" label="Phone number" fullWidth type="number" onChange={this.handleChange}/>
+                        <TextField defaultValue={postById.phone} name="phone" label="Phone number" fullWidth type="number" onChange={this.handleChange}/>
                       </Grid>
                       <Grid item xs={12} sm={9} className={styles.paperCard__item}>
-                        <TextField id={postById.location} value={postById.location} name="location" label="Localization" fullWidth onChange={this.handleChange}/>
+                        <TextField defaultValue={postById.location} name="location" label="Localization" fullWidth onChange={this.handleChange}/>
                       </Grid>
                       <Grid item xs={12} sm={9} className={styles.paperCard__item}>
                         <FormControl required fullWidth variant="filled">
@@ -117,7 +117,7 @@ class Component extends React.Component {
                           Add photo
                         </Typography>
                         <label className={styles.file}>
-                          <input id={postById.image} type="file" name="image" accept="image/*" onChange={this.handleImage}></input>
+                          <input type="file" name="image" accept="image/*" onChange={this.handleImage}></input>
                         </label>
                       </Grid>
                       <Grid item xs={12} sm={9} className={styles.paperCard__item} align="center">
