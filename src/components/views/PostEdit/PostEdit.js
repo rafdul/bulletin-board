@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-import StatusContext from '../../../context/StatusContext';
+import StatusUserContext from '../../../context/StatusContext';
 
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -70,13 +70,13 @@ class Component extends React.Component {
     const {post} = this.state;
 
     return(
-      <StatusContext.Consumer>
+      <StatusUserContext.Consumer>
         { value => (
           <div className={clsx(className, styles.root)}>
             <h2>Edit &quot;{postById.title}&quot; (id: {postById.id}) </h2>
             <Grid container spacing={3} className={styles.addContainer} justify="center">
               <Grid item xs={12} sm={9}>
-                {value.statusTrue
+                {value.statusUserTrue
                   ?
                   <Paper className={styles.paperCard}>
                     <form onSubmit={this.submitForm}>
@@ -142,7 +142,7 @@ class Component extends React.Component {
             </Grid>
           </div>
         )}
-      </StatusContext.Consumer>
+      </StatusUserContext.Consumer>
     );
   }
 }

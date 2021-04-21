@@ -21,7 +21,7 @@ const theme = createMuiTheme({
   },
 });
 
-const App = (props) => (
+const App = () => (
   <Provider store={store}>
     <BrowserRouter>
       <StylesProvider injectFirst>
@@ -29,8 +29,8 @@ const App = (props) => (
           <CssBaseline />
           <MainLayout>
             <Switch>
-              {/* <Route exact path='/' component={Homepage} /> */}
-              <Route exact path='/' render={(props) => <Homepage {...props}/>} />
+              <Route exact path='/' component={Homepage} />
+              {/* <Route exact path='/' render={(props) => <Homepage {...props}/>} /> */}
               <Route exact path='/post/add' component={PostAdd} />
               <Route exact path='/post/:id' component={Post} />
               <Route exact path='/post/:id/edit' component={PostEdit} />

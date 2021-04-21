@@ -4,7 +4,10 @@ import { PostComponent } from './Post';
 
 describe('Component Post', () => {
   it('should render without crashing', () => {
-    const component = shallow(<PostComponent />);
+
+    const fetchOnePost = function(){};
+
+    const component = shallow(<PostComponent fetchOnePost={fetchOnePost}/>);
     expect(component).toBeTruthy();
   });
 });

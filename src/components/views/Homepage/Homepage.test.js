@@ -4,7 +4,10 @@ import { HomepageComponent } from './Homepage';
 
 describe('Component Homepage', () => {
   it('should render without crashing', () => {
-    const component = shallow(<HomepageComponent />);
+
+    const fetchPublishedPosts = function(){};
+
+    const component = shallow(<HomepageComponent fetchPublishedPosts={fetchPublishedPosts}/>);
     expect(component).toBeTruthy();
   });
 });

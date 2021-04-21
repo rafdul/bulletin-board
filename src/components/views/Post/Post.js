@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAt, faPhoneAlt, faMapMarkedAlt } from '@fortawesome/free-solid-svg-icons';
 
-import StatusContext from '../../../context/StatusContext';
+import StatusUserContext from '../../../context/StatusContext';
 
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
@@ -18,102 +18,113 @@ import clsx from 'clsx';
 
 import { connect } from 'react-redux';
 // import { reduxSelector, reduxActionCreator } from '../../../redux/exampleRedux.js';
-import { getAll, getOnePost } from '../../../redux/postsRedux';
+import { getPost, fetchPost, getOnePost } from '../../../redux/postsRedux';
 
 import styles from './Post.module.scss';
 
 
-const Component = ({className, postById, props}) => {
+class Component extends React.Component {
 
   // console.log('postById:', postById);
+  componentDidMount() {
+    const { fetchOnePost } = this.props;
+    fetchOnePost();
+  }
 
-  return(
-    <StatusContext.Consumer>
-      { value => (
-        <div className={clsx(className, styles.root)}>
-          <h2>Post: {postById.title}</h2>
-          <Grid container spacing={3} className={styles.postContainer}>
-            <Grid item xs={12} sm={5} className={styles.postItem}>
-              <div className={styles.postItem__imageBox}>
-                <img src={postById.image} alt={postById.title} className={styles.postImage}/>
-              </div>
-            </Grid>
-            <Grid item xs={12} sm={7} className={styles.postItem}>
-              <Card>
-                <CardContent>
-                  {value.statusTrue
-                    ?
-                    <div className={styles.postItem__link}>
-                      <Link to={`/post/${postById.id}/edit`} variant="subtitle1" color="secondary">
-                        <Fab size="small" color="secondary" aria-label="add" variant="extended">Edit post</Fab>
-                      </Link>
+  render() {
+    const {className, postById} = this.props;
+
+    return(
+      <StatusUserContext.Consumer>
+        { value => (
+          <div className={clsx(className, styles.root)}>
+            <h2>Post: {postById.title}</h2>
+            <Grid container spacing={3} className={styles.postContainer}>
+              <Grid item xs={12} sm={5} className={styles.postItem}>
+                <div className={styles.postItem__imageBox}>
+                  <img src={postById.photo} alt={postById.title} className={styles.postImage}/>
+                </div>
+              </Grid>
+              <Grid item xs={12} sm={7} className={styles.postItem}>
+                <Card>
+                  <CardContent>
+                    {value.statusUserTrue
+                      ?
+                      <div className={styles.postItem__link}>
+                        <Link to={`/post/${postById._id}/edit`} variant="subtitle1" color="secondary">
+                          <Fab size="small" color="secondary" aria-label="add" variant="extended">Edit post</Fab>
+                        </Link>
+                      </div>
+                      :
+                      null
+                    }
+                    <div className={styles.postItem__group}>
+                      <Typography color="textSecondary" variant="body2">
+                        Status: {postById.status}
+                      </Typography>
+                      <Typography variant="h5">
+                        {postById.price}
+                      </Typography>
                     </div>
-                    :
-                    null
-                  }
-                  <div className={styles.postItem__group}>
-                    <Typography color="textSecondary" variant="body2">
-                      Status: {postById.status}
+                    <Typography variant="subtitle1" className={styles.postItem__content}>
+                      {postById.text}
                     </Typography>
-                    <Typography variant="h5">
-                      {postById.price}
+                    <Typography variant="subtitle1" className={styles.postItem__content}>
+                      Contact
+                      <div>
+                        <FontAwesomeIcon icon={faAt} className={styles.icon}/> {postById.author}<br/>
+                        <FontAwesomeIcon icon={faPhoneAlt} className={styles.icon}/> {postById.phone}<br/>
+                        <FontAwesomeIcon icon={faMapMarkedAlt} className={styles.icon}/> {postById.location}
+                      </div>
                     </Typography>
-                  </div>
-                  <Typography variant="subtitle1" className={styles.postItem__content}>
-                    {postById.content}
-                  </Typography>
-                  <Typography variant="subtitle1" className={styles.postItem__content}>
-                    Contact
-                    <div>
-                      <FontAwesomeIcon icon={faAt} className={styles.icon}/> {postById.email}<br/>
-                      <FontAwesomeIcon icon={faPhoneAlt} className={styles.icon}/> {postById.phone}<br/>
-                      <FontAwesomeIcon icon={faMapMarkedAlt} className={styles.icon}/> {postById.location}
-                    </div>
-                  </Typography>
-                  <Typography color="textSecondary" variant="body2" className={styles.postItem__content}>
-                    <span>Publication: {postById.datePublication}</span>
-                    <span>Updated: {postById.dateLastUpdate}</span>
-                  </Typography>
-                </CardContent>
-              </Card>
+                    <Typography color="textSecondary" variant="body2" className={styles.postItem__content}>
+                      <span>Publication: {postById.created}</span>
+                      <span>Updated: {postById.updated}</span>
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
             </Grid>
-          </Grid>
-        </div>
-      )}
-    </StatusContext.Consumer>
-  );
-};
+          </div>
+        )}
+      </StatusUserContext.Consumer>
+    );
+  }
+}
 
 Component.propTypes = {
   className: PropTypes.string,
   props: PropTypes.object,
   match: PropTypes.object,
   params: PropTypes.object,
-  postById: PropTypes.shape({
-    id: PropTypes.string,
-    title: PropTypes.string,
-    content: PropTypes.string,
-    datePublication: PropTypes.string,
-    dateLastUpdate: PropTypes.string,
-    email: PropTypes.string,
-    status: PropTypes.string,
-    image: PropTypes.string,
-    price: PropTypes.string,
-    phone: PropTypes.string,
-    location: PropTypes.string,
-  }),
+  postById: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  // postById: PropTypes.objectOf(
+  //   PropTypes.shape({
+  //     _id: PropTypes.string,
+  //     title: PropTypes.string,
+  //     text: PropTypes.string,
+  //     created: PropTypes.string,
+  //     updated: PropTypes.string,
+  //     author: PropTypes.string,
+  //     status: PropTypes.string,
+  //     photo: PropTypes.string,
+  //     price: PropTypes.number,
+  //     phone: PropTypes.string,
+  //     location: PropTypes.string,
+  //   }),
+  // ),
 };
 
 const mapStateToProps = (state, props) => ({
-  postsAll: getAll(state),
-  postById: getOnePost(state, props.match.params.id),
+  postById: getPost(state),
+  // postById: getOnePost(state, props.match.params.id),
 });
 
-// const mapDispatchToProps = dispatch => ({
-//   someAction: arg => dispatch(reduxActionCreator(arg)),
-// });
+const mapDispatchToProps = (dispatch, props) => ({
+  fetchOnePost: () => dispatch(fetchPost(props.match.params.id)),
+});
 
-const Container = connect(mapStateToProps)(Component);
+const Container = connect(mapStateToProps, mapDispatchToProps)(Component);
 
 export {
   // Component as Post,

@@ -1,6 +1,6 @@
 /* eslint-disable linebreak-style */
 import React from 'react';
 
-const StatusContext = React.createContext();
+const StatusUserContext = React.createContext();
 
-export default StatusContext;
+export default StatusUserContext;

@@ -17,7 +17,7 @@ import styles from './Header.module.scss';
 // import { connect } from 'react-redux';
 // import { reduxSelector, reduxActionCreator } from '../../../redux/exampleRedux.js';
 
-const Component = ({className, statusTrue}) => (
+const Component = ({className, statusUserTrue}) => (
   <div className={clsx(className, styles.root)}>
     <AppBar position="static">
       <Toolbar className={styles.menu}>
@@ -25,7 +25,7 @@ const Component = ({className, statusTrue}) => (
           <Link to={'/'} className={styles.menu__logo}>Bulletin Board</Link>
         </Typography>
         <div>
-          {statusTrue
+          {statusUserTrue
             ?
             'My announcements'
             :
@@ -43,7 +43,7 @@ const Component = ({className, statusTrue}) => (
 Component.propTypes = {
   className: PropTypes.string,
   setIsLogged: PropTypes.func,
-  statusTrue: PropTypes.bool,
+  statusUserTrue: PropTypes.bool,
 };
 
 // const mapStateToProps = state => ({

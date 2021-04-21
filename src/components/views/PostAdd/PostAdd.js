@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-import StatusContext from '../../../context/StatusContext';
+import StatusUserContext from '../../../context/StatusContext';
 
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -36,7 +36,7 @@ class Component extends React.Component {
       email: '',
       location: '',
       phone: '',
-      status: 'published',
+      status: '',
       datePublication: '',
       dateLastUpdate: '',
     },
@@ -92,13 +92,13 @@ class Component extends React.Component {
     const { post } = this.state;
 
     return(
-      <StatusContext.Consumer>
+      <StatusUserContext.Consumer>
         {value => (
           <div className={clsx(className, styles.root)}>
             <h2>Add new post</h2>
             <Grid container spacing={3} className={styles.addContainer} justify="center">
               <Grid item xs={12} sm={9}>
-                {value.statusTrue
+                {value.statusUserTrue
                   ?
                   <Paper className={styles.paperCard}>
                     <form onSubmit={this.submitForm}>
@@ -106,22 +106,22 @@ class Component extends React.Component {
                         Fill in the form
                       </Typography>
                       <Grid item xs={12} sm={9} className={styles.paperCard__item}>
-                        <TextField required id={post.title} name="title" label="Title" fullWidth onChange={this.handleChange} helperText="min. 10 characters"/>
+                        <TextField required name="title" label="Title" fullWidth onChange={this.handleChange} helperText="min. 10 characters"/>
                       </Grid>
                       <Grid item xs={12} sm={9} className={styles.paperCard__item}>
-                        <TextField required id={post.content} name="content" label="Describe" fullWidth multiline onChange={this.handleChange} helperText="min. 20 characters"/>
+                        <TextField required name="content" label="Describe" fullWidth multiline onChange={this.handleChange} helperText="min. 20 characters"/>
                       </Grid>
                       <Grid item xs={12} sm={9} className={styles.paperCard__item}>
-                        <TextField required id={post.price} name="price" label="Price ($)" fullWidth type="number" onChange={this.handleChange}/>
+                        <TextField required name="price" label="Price ($)" fullWidth type="number" onChange={this.handleChange}/>
                       </Grid>
                       <Grid item xs={12} sm={9} className={styles.paperCard__item}>
-                        <TextField required id={post.email} name="email" label="Email address" fullWidth onChange={this.handleChange} />
+                        <TextField required name="email" label="Email address" fullWidth onChange={this.handleChange} />
                       </Grid>
                       <Grid item xs={12} sm={9} className={styles.paperCard__item}>
-                        <TextField id={post.phone} name="phone" label="Phone number" fullWidth type="number" onChange={this.handleChange}/>
+                        <TextField name="phone" label="Phone number" fullWidth type="number" onChange={this.handleChange}/>
                       </Grid>
                       <Grid item xs={12} sm={9} className={styles.paperCard__item}>
-                        <TextField id={post.location} name="location" label="Localization" fullWidth onChange={this.handleChange}/>
+                        <TextField name="location" label="Localization" fullWidth onChange={this.handleChange}/>
                       </Grid>
                       <Grid item xs={12} sm={9} className={styles.paperCard__item}>
                         <FormControl required fullWidth variant="filled">
@@ -139,7 +139,7 @@ class Component extends React.Component {
                           Add photo
                         </Typography>
                         <label className={styles.file}>
-                          <input id={post.image} type="file" name="image" accept="image/*" onChange={this.handleImage}></input>
+                          <input id='file' type="file" name="image" accept="image/*" onChange={this.handleImage}></input>
                         </label>
                       </Grid>
                       <Grid item xs={12} sm={9} className={styles.paperCard__item} align="center">
@@ -164,7 +164,7 @@ class Component extends React.Component {
             </Grid>
           </div>
         )}
-      </StatusContext.Consumer>
+      </StatusUserContext.Consumer>
     );
   }
 }

@@ -1,11 +1,10 @@
+import Axios from 'axios';
+
 /* selectors */
 export const getAll = ({posts}) => posts.data;
+export const getPost = ({posts}) => posts.data;
 export const getOnePost = ({posts}, id) => {
-  const filtered = posts.data.filter(post => post.id === id);
-  return filtered.length ? filtered[0] : {
-    id: 'none',
-    title: 'not found post',
-  };
+  posts.data.filter(post => post._id == id);
 };
 
 /* action name creator */
@@ -29,6 +28,54 @@ export const addPost = payload => ({ payload, type: ADD_POST });
 export const editPost = payload => ({ payload, type: EDIT_POST });
 
 /* thunk creators */
+export const fetchPublished = () => {
+  return (dispatch, getState) => {
+    const { posts } = getState();
+
+    if(!posts.data.length && posts.loading.active === false) {
+      dispatch(fetchStarted());
+
+      Axios
+      .get('http://localhost:8000/api/posts')
+      .then(res => {
+        dispatch(fetchSuccess(res.data));
+      })
+      .catch(err => {
+        dispatch(fetchError(err.message || true));
+      });
+    }
+  };
+};
+
+export const fetchPost = (id) => {
+  return (dispatch, getState) => {
+    dispatch(fetchStarted());
+
+    Axios
+    .get(`http://localhost:8000/api/posts/${id}`)
+    .then(res => {
+      dispatch(fetchSuccess(res.data));
+    })
+    .catch(err => {
+      dispatch(fetchError(err.message || true));
+    });
+  }
+}
+
+export const fetchAddPost = (post) => {
+  return async dispatch  => {
+    dispatch(fetchStarted());
+    try {
+
+      let res = await axios.post('http://localhost:8000/api/posts/add', post);
+      dispatch(addPost(res.post));
+
+    }
+    catch(err) {
+      dispatch(fetchError(err.message || true));
+    };
+  }
+}
 
 /* reducer */
 export const reducer = (statePart = [], action = {}) => {

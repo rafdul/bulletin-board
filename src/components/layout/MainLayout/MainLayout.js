@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {Header} from '../Header/Header';
 import {Switcher} from '../../common/Switcher/Switcher';
 
-import StatusContext from '../../../context/StatusContext';
+import StatusUserContext from '../../../context/StatusContext';
 
 import clsx from 'clsx';
 
@@ -14,7 +14,7 @@ import styles from './MainLayout.module.scss';
 
 const Component = ({className, children}) => {
 
-  const [ statusTrue , setStatusUser ] = useState(true);
+  const [ statusUserTrue , setStatusUser ] = useState(true);
   // console.log('children', children);
   // console.log('children.props.children', children.props.children);
 
@@ -23,10 +23,10 @@ const Component = ({className, children}) => {
       <div className={styles.container}>
         <Switcher setStatusUser={setStatusUser}/>
         {/* <Header statusTrue={statusTrue} /> */}
-        {React.cloneElement(<Header />, { statusTrue: statusTrue })}
-        <StatusContext.Provider value={{statusTrue}}>
+        {React.cloneElement(<Header />, { statusUserTrue: statusUserTrue })}
+        <StatusUserContext.Provider value={{statusUserTrue}}>
           {children}
-        </StatusContext.Provider>
+        </StatusUserContext.Provider>
       </div>
     </div>
   );
