@@ -32,7 +32,7 @@ export const fetchPublished = () => {
   return (dispatch, getState) => {
     const { posts } = getState();
 
-    if(!posts.data.length && posts.loading.active === false) {
+    if(posts.data.length === 0 || posts.loading.active === false) {
       dispatch(fetchStarted());
 
       Axios
@@ -52,30 +52,32 @@ export const fetchPost = (id) => {
     dispatch(fetchStarted());
 
     Axios
-    .get(`http://localhost:8000/api/posts/${id}`)
-    .then(res => {
-      dispatch(fetchSuccess(res.data));
-    })
-    .catch(err => {
-      dispatch(fetchError(err.message || true));
-    });
-  }
+      .get(`http://localhost:8000/api/posts/${id}`)
+      .then(res => {
+        dispatch(fetchSuccess(res.data));
+      })
+      .catch(err => {
+        dispatch(fetchError(err.message || true));
+      });
+    }
 }
 
 export const fetchAddPost = (post) => {
-  return async dispatch  => {
+  console.log(post);
+  return (dispatch, getState) => {
     dispatch(fetchStarted());
-    try {
+    Axios
+      .post('http://localhost:8000/api/posts/add', post)
+      .then(res => {
+        dispatch(addPost(post));
+      })
+      .catch(err => {
+        dispatch(fetchError(err.message || true));
+      });
 
-      let res = await axios.post('http://localhost:8000/api/posts/add', post);
-      dispatch(addPost(res.post));
+  };
+};
 
-    }
-    catch(err) {
-      dispatch(fetchError(err.message || true));
-    };
-  }
-}
 
 /* reducer */
 export const reducer = (statePart = [], action = {}) => {

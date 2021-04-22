@@ -31,10 +31,46 @@ router.get('/posts/:id', async (req, res) => {
 
 router.post('/posts/add', async (req, res) => {
   try {
-    const { _id, title, text, author, created, updated, status, photo, price, phone, location } = req.body;
-    const newPost = new Post({ _id: _id, title: title, text: text, author: author, created: created, updated: updated, status: status, photo: photo, price: price, phone: phone, location: location });
-    await newPost.save();
-    res.json({ message: 'OK (Add new Post done)'});
+    console.log('req.body',req.body);
+    const { title, text, author, created, updated, status, photo, price, phone, location } = req.body;
+    // const photo = req.files.file;
+
+    const authorPattern = new RegExp('^[a-zA-Z0-9][a-zA-Z0-9_.-]+@[a-zA-Z0-9][a-zA-Z0-9_.-]+\.{1,3}[a-zA-Z]{2,4}');
+    const contentPattern = new RegExp(/(.)*/, 'g');
+
+    const authorMatched = (author.match(authorPattern) || []).join('');
+    const titleMatched = (title.match(contentPattern) || []).join('');
+    const textMatched = (text.match(contentPattern) || []).join('');
+
+    if((authorMatched.length < author.length) && (titleMatched.length < title.length) && (textMatched.length < text.length)) {
+      throw new Error('Wrong characters used!')
+    };
+    if(title.length < 10) {
+      throw new Error('Too short title (min. 10 characters)')
+    };
+    if(text.length < 20) {
+      throw new Error('Too short text (min. 20 characters)')
+    };
+
+    if((authorMatched.length == author.length) && (titleMatched.length == title.length) && (textMatched.length == text.length)) {
+
+      // const fileName = photo.path.split('/').slice(-1)[0];
+      // const fileNameExt = fileName.split('.').slice(-1)[0];
+
+      // if((fileNameExt === 'jpg' || 'png' || 'gif') && title.length >= 10 && author.length >= 20) {
+      //   const newPost = new Post({ _id: _id, title: title, text: text, author: author, created: created, updated: updated, status: status, photo: photo, price: price, phone: phone, location: location });
+      //   await newPost.save();
+      //   res.json(newPost);
+      // } else {
+      //   throw res.json('Try one more');
+      // }
+      const newPost = new Post({ title, text, author, created, updated, status, photo, price, phone, location });
+      await newPost.save();
+      console.log('newPost', newPost);
+      res.json(newPost);
+    } else {
+      throw new Error('Wrong input!');
+    }
   }
   catch(err) {
     res.status(500).json(err);

@@ -16,11 +16,10 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 
 import clsx from 'clsx';
-import uniqid from 'uniqid';
+// import uniqid from 'uniqid';
 
 import { connect } from 'react-redux';
-// import { reduxSelector, reduxActionCreator } from '../../../redux/exampleRedux.js';
-import {getAll, addPost } from '../../../redux/postsRedux';
+import {getAll, fetchAddPost, addPost } from '../../../redux/postsRedux';
 
 import styles from './PostAdd.module.scss';
 
@@ -28,17 +27,17 @@ import styles from './PostAdd.module.scss';
 class Component extends React.Component {
   state = {
     post: {
-      id: '',
+      // _id: '',
       title: '',
-      content: '',
+      text: '',
       price: '',
-      image: '',
-      email: '',
+      photo: '',
+      author: '',
       location: '',
       phone: '',
       status: '',
-      datePublication: '',
-      dateLastUpdate: '',
+      created: '',
+      updated: '',
     },
   };
 
@@ -52,38 +51,48 @@ class Component extends React.Component {
   handleImage = (file) => {
     const { post } = this.state;
 
-    if (file) this.setState({ post: { ...post, [post.image]: file[0] } });
-    else this.setState({ post: { ...post, image: null } });
+    if (file) this.setState({ post: { ...post, [post.photo]: file[0] } });
+    else this.setState({ post: { ...post, photo: null } });
   }
 
   submitForm = (event) => {
-    event.preventDefault();
+
     const { post } = this.state;
     const { addPost } = this.props;
+    event.preventDefault();
 
-    if((post.title.length > 9) && (post.content.length > 19) && post.email) {
-      post.id = uniqid();
-      post.datePublication = new Date().toISOString();
-      post.dateLastUpdate = post.datePublication;
+    if(post.title.length < 10) return alert('Min. 10 characters in title');
+    if(post.text.length < 20) return alert('Min. 20 characters in text');
+    if(post.price <= 0) return alert('Wrong price');
+    const authorPattern = new RegExp('^[a-zA-Z0-9][a-zA-Z0-9_.-]+@[a-zA-Z0-9][a-zA-Z0-9_.-]+\.{1,3}[a-zA-Z]{2,4}');
+    const authorMatched = post.author.match(authorPattern);
+    const authorMatchedJoined = (authorMatched || []).join('');
+    if(authorMatchedJoined.length < post.author.length) return alert('Wrong format email');
+
+    if((post.title.length > 9) && (post.text.length > 19) && (post.author.length === authorMatchedJoined.length)) {
+      // post._id = uniqid();
+      post.created = new Date().toISOString();
+      post.updated = post.created;
+      console.log('dodawany post', post)
       addPost(post);
 
       this.setState({
         post: {
-          id: '',
+          // _id: '',
           title: '',
-          content: '',
+          text: '',
           price: '',
-          image: '',
-          email: '',
+          photo: '',
+          author: '',
           location: '',
           phone: '',
           status: '',
-          datePublication: '',
-          dateLastUpdate: '',
+          created: '',
+          updated: '',
         },
       });
-    } else {
-      alert('Please fill required fields');
+
+      alert('Your post was added.')
     }
   };
 
@@ -109,13 +118,13 @@ class Component extends React.Component {
                         <TextField required name="title" label="Title" fullWidth onChange={this.handleChange} helperText="min. 10 characters"/>
                       </Grid>
                       <Grid item xs={12} sm={9} className={styles.paperCard__item}>
-                        <TextField required name="content" label="Describe" fullWidth multiline onChange={this.handleChange} helperText="min. 20 characters"/>
+                        <TextField required name="text" label="Describe" fullWidth multiline onChange={this.handleChange} helperText="min. 20 characters"/>
                       </Grid>
                       <Grid item xs={12} sm={9} className={styles.paperCard__item}>
                         <TextField required name="price" label="Price ($)" fullWidth type="number" onChange={this.handleChange}/>
                       </Grid>
                       <Grid item xs={12} sm={9} className={styles.paperCard__item}>
-                        <TextField required name="email" label="Email address" fullWidth onChange={this.handleChange} />
+                        <TextField required name="author" label="Email address" fullWidth onChange={this.handleChange} />
                       </Grid>
                       <Grid item xs={12} sm={9} className={styles.paperCard__item}>
                         <TextField name="phone" label="Phone number" fullWidth type="number" onChange={this.handleChange}/>
@@ -139,7 +148,7 @@ class Component extends React.Component {
                           Add photo
                         </Typography>
                         <label className={styles.file}>
-                          <input id='file' type="file" name="image" accept="image/*" onChange={this.handleImage}></input>
+                          <input id='file' type="file" name="photo" accept="image/*" onChange={this.handleImage}></input>
                         </label>
                       </Grid>
                       <Grid item xs={12} sm={9} className={styles.paperCard__item} align="center">
@@ -194,7 +203,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  addPost: (post) => dispatch(addPost(post)),
+  addPost: (post) => dispatch(fetchAddPost(post)),
+  // addPost: (post) => dispatch(addPost(post)),
 });
 
 const Container = connect(mapStateToProps, mapDispatchToProps)(Component);
