@@ -43,14 +43,14 @@ router.post('/posts/add', async (req, res) => {
     const textMatched = (text.match(contentPattern) || []).join('');
 
     if((authorMatched.length < author.length) && (titleMatched.length < title.length) && (textMatched.length < text.length)) {
-      throw new Error('Wrong characters used!')
-    };
+      throw new Error('Wrong characters used!');
+    }
     if(title.length < 10) {
-      throw new Error('Too short title (min. 10 characters)')
-    };
+      throw new Error('Too short title (min. 10 characters)');
+    }
     if(text.length < 20) {
-      throw new Error('Too short text (min. 20 characters)')
-    };
+      throw new Error('Too short text (min. 20 characters)');
+    }
 
     if((authorMatched.length == author.length) && (titleMatched.length == title.length) && (textMatched.length == text.length)) {
 

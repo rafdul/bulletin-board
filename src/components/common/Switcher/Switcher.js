@@ -3,54 +3,70 @@ import PropTypes from 'prop-types';
 
 import clsx from 'clsx';
 
-// import { getStatusUser, loadStatusUser } from '../../../redux/statusUserRedux';
-// import { connect } from 'react-redux';
+import { loadStatusUser } from '../../../redux/statusUserRedux';
+import { connect } from 'react-redux';
 // import { reduxSelector, reduxActionCreator } from '../../../redux/exampleRedux.js';
 
 import styles from './Switcher.module.scss';
 
 
-const Component = ({className, setStatusUser}) => {
+class Component extends React.Component {
+  state = {
+    user: {
+      active: true,
+    },
+  };
 
-  const handleOnChange = (event) => {
-    console.log('event w funkcji', event);
+  handleOnChange = (event) => {
+    const { userActiveChange } = this.props;
+    const {user} = this.state;
+
     if(event === 'true') {
-      setStatusUser(true);
+      user.active = true;
+      userActiveChange(user);
+      // console.log('userActiveChange(event=true)', userActiveChange(user));
     } else {
-      setStatusUser(false);
+      user.active = false;
+      userActiveChange(user);
+      // console.log('userActiveChange(event=false)', userActiveChange(user));
     }
   };
 
-  return(
-    <div>
-      <div className={clsx(className, styles.root)}>
-        <select name="statusUser" id="isLogged" onChange={(event) => handleOnChange(event.target.value)}>
-          <option value="true">View for logged user</option>
-          <option value="false">View for unlogged user</option>
-        </select>
+  render() {
+    const {className, user} = this.props;
+
+    return(
+      <div>
+        <div className={clsx(className, styles.root)}>
+          <select name="statusUser" id="isLogged" onChange={(event) => this.handleOnChange(event.target.value)}>
+            <option value="true">View for logged user</option>
+            <option value="false">View for unlogged user</option>
+          </select>
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
 Component.propTypes = {
   className: PropTypes.string,
   setStatusUser: PropTypes.func,
+  user: PropTypes.object,
+  userActiveChange: PropTypes.func,
 };
 
-// const mapStateToProps = state => ({
-//   isLogged: getStatusUser(state),
-//   // someProp: reduxSelector(state),
-// });
+const mapStateToProps = state => ({
+  user: state.user,
+});
 
-// const mapDispatchToProps = dispatch => ({
-//   loadStatus: () => dispatch(loadStatusUser()),
-// });
+const mapDispatchToProps = dispatch => ({
+  userActiveChange: (user) => dispatch(loadStatusUser(user)),
+});
 
-// const Container = connect(mapStateToProps, mapDispatchToProps)(Component);
+const Container = connect(mapStateToProps, mapDispatchToProps)(Component);
 
 export {
-  Component as Switcher,
-  // Container as Switcher,
-  // Component as SwitcherComponent,
+  // Component as Switcher,
+  Container as Switcher,
+  Component as SwitcherComponent,
 };

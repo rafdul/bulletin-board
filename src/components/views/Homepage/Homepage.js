@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-import StatusUserContext from '../../../context/StatusContext';
-
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
@@ -32,61 +30,55 @@ class Component extends React.Component {
   }
 
   render() {
-    const {className, postsAll} = this.props;
+    const {className, postsAll, user} = this.props;
 
     return (
-      <StatusUserContext.Consumer>
-        { value => (
-          <div className={clsx(className, styles.root)}>
-            {/* {console.log('value.statusTrue w homepage', value.statusTrue)} */}
-            <div className={styles.announcement}>
-              {value.statusUserTrue
-                ?
-                <Link to={'/post/add'} className={styles.announcement__link}>
-                  <Fab size="small" color="primary" aria-label="add" variant="extended">Add announcement</Fab>
-                  {/* Add announcement */}
-                </Link>
-
-                :
-                <LinkUI href="#" className={styles.announcement__link}>
-                  <Fab size="small" color="secondary" aria-label="add" variant="extended">Login</Fab>
-                </LinkUI>
-              }
-            </div>
-            <div className={styles.card}>
-              {postsAll.map(post => (
-                <Card key={post._id} className={styles.card__item}>
-                  <CardActionArea href={`/post/${post._id}`}>
-                    <CardMedia
-                      className={styles.image}
-                      component="img"
-                      image={post.photo}
-                      title={post.title}
-                    />
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="h2">
-                        {post.title}
-                      </Typography>
-                      <Typography variant="body2" color="textSecondary" component="p">
-                        {post.text}
-                      </Typography>
-                      <div className={styles.price}>
-                        <Typography component="p" variant="subtitle2">Price: {post.price}</Typography>
-                        <Typography component="p" variant="subtitle2">Location: {post.location}</Typography>
-                      </div>
-                    </CardContent>
-                  </CardActionArea>
-                  <CardActions className={styles.card__btn}>
-                    <Button size="small" color="primary" href={`/post/${post._id}`} >
-                      Show more
-                    </Button>
-                  </CardActions>
-                </Card>
-              ))}
-            </div>
-          </div>
-        )}
-      </StatusUserContext.Consumer>
+      <div className={clsx(className, styles.root)}>
+        {/* {console.log('value.statusTrue w homepage', value.statusTrue)} */}
+        <div className={styles.announcement}>
+          {user.active === true
+            ?
+            <Link to={'/post/add'} className={styles.announcement__link}>
+              <Fab size="small" color="primary" aria-label="add" variant="extended">Add announcement</Fab>
+            </Link>
+            :
+            <LinkUI href="#" className={styles.announcement__link}>
+              <Fab size="small" color="secondary" aria-label="add" variant="extended">Login</Fab>
+            </LinkUI>
+          }
+        </div>
+        <div className={styles.card}>
+          {postsAll.map(post => (
+            <Card key={post._id} className={styles.card__item}>
+              <CardActionArea href={`/post/${post._id}`}>
+                <CardMedia
+                  className={styles.image}
+                  component="img"
+                  image={post.photo}
+                  title={post.title}
+                />
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="h2">
+                    {post.title}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary" component="p">
+                    {post.text}
+                  </Typography>
+                  <div className={styles.price}>
+                    <Typography component="p" variant="subtitle2">Price: {post.price}</Typography>
+                    <Typography component="p" variant="subtitle2">Location: {post.location}</Typography>
+                  </div>
+                </CardContent>
+              </CardActionArea>
+              <CardActions className={styles.card__btn}>
+                <Button size="small" color="primary" href={`/post/${post._id}`} >
+                  Show more
+                </Button>
+              </CardActions>
+            </Card>
+          ))}
+        </div>
+      </div>
     );
   }
 }
@@ -112,11 +104,12 @@ Component.propTypes = {
   statusTrue: PropTypes.bool,
   state: PropTypes.bool,
   fetchPublishedPosts: PropTypes.func,
+  user: PropTypes.object,
 };
 
 const mapStateToProps = state => ({
   postsAll: getAll(state),
-  // isLogged: getStatusUser(state),
+  user: state.user,
   // someProp: reduxSelector(state),
 });
 

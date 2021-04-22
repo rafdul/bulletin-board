@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-import StatusUserContext from '../../../context/StatusContext';
-
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
@@ -73,7 +71,7 @@ class Component extends React.Component {
       // post._id = uniqid();
       post.created = new Date().toISOString();
       post.updated = post.created;
-      console.log('dodawany post', post)
+      console.log('dodawany post', post);
       addPost(post);
 
       this.setState({
@@ -92,88 +90,84 @@ class Component extends React.Component {
         },
       });
 
-      alert('Your post was added.')
+      alert('Your post was added.');
     }
   };
 
   render() {
-    const {className } = this.props;
+    const {className, user } = this.props;
     const { post } = this.state;
 
     return(
-      <StatusUserContext.Consumer>
-        {value => (
-          <div className={clsx(className, styles.root)}>
-            <h2>Add new post</h2>
-            <Grid container spacing={3} className={styles.addContainer} justify="center">
-              <Grid item xs={12} sm={9}>
-                {value.statusUserTrue
-                  ?
-                  <Paper className={styles.paperCard}>
-                    <form onSubmit={this.submitForm}>
-                      <Typography variant="h6" gutterBottom align="center">
-                        Fill in the form
-                      </Typography>
-                      <Grid item xs={12} sm={9} className={styles.paperCard__item}>
-                        <TextField required name="title" label="Title" fullWidth onChange={this.handleChange} helperText="min. 10 characters"/>
-                      </Grid>
-                      <Grid item xs={12} sm={9} className={styles.paperCard__item}>
-                        <TextField required name="text" label="Describe" fullWidth multiline onChange={this.handleChange} helperText="min. 20 characters"/>
-                      </Grid>
-                      <Grid item xs={12} sm={9} className={styles.paperCard__item}>
-                        <TextField required name="price" label="Price ($)" fullWidth type="number" onChange={this.handleChange}/>
-                      </Grid>
-                      <Grid item xs={12} sm={9} className={styles.paperCard__item}>
-                        <TextField required name="author" label="Email address" fullWidth onChange={this.handleChange} />
-                      </Grid>
-                      <Grid item xs={12} sm={9} className={styles.paperCard__item}>
-                        <TextField name="phone" label="Phone number" fullWidth type="number" onChange={this.handleChange}/>
-                      </Grid>
-                      <Grid item xs={12} sm={9} className={styles.paperCard__item}>
-                        <TextField name="location" label="Localization" fullWidth onChange={this.handleChange}/>
-                      </Grid>
-                      <Grid item xs={12} sm={9} className={styles.paperCard__item}>
-                        <FormControl required fullWidth variant="filled">
-                          <InputLabel id="demo-simple-select-label">Status</InputLabel>
-                          <Select labelId="demo-simple-select-label" fullWidth name="status" value={post.status} onChange={this.handleChange} >
-                            <MenuItem value="draft">Draft</MenuItem>
-                            <MenuItem value="published">Published</MenuItem>
-                            <MenuItem value="finished">Finished</MenuItem>
-                          </Select>
-                        </FormControl>
-                        <FormHelperText>Choose status your announcement</FormHelperText>
-                      </Grid>
-                      <Grid item xs={12} sm={9} className={styles.paperCard__item}>
-                        <Typography variant="body1" gutterBottom align="center">
-                          Add photo
-                        </Typography>
-                        <label className={styles.file}>
-                          <input id='file' type="file" name="photo" accept="image/*" onChange={this.handleImage}></input>
-                        </label>
-                      </Grid>
-                      <Grid item xs={12} sm={9} className={styles.paperCard__item} align="center">
-                        <Button variant="outlined" type="submit" color="secondary" className={styles.paperCard__btn}>
-                          Submit
-                        </Button>
-                      </Grid>
-                    </form>
-                  </Paper>
-                  :
-                  <Paper className={styles.paperCard}>
-                    <h2 className={styles.paperCard__textError}>Only for logged user</h2>
-                    <p>
-                      <Link className={styles.paperCard__link}>Login</Link>
-                    </p>
-                    <p>
-                      <Link to={'/'} className={styles.paperCard__link}>Back to homepage</Link>
-                    </p>
-                  </Paper>
-                }
-              </Grid>
-            </Grid>
-          </div>
-        )}
-      </StatusUserContext.Consumer>
+      <div className={clsx(className, styles.root)}>
+        <h2>Add new post</h2>
+        <Grid container spacing={3} className={styles.addContainer} justify="center">
+          <Grid item xs={12} sm={9}>
+            {user.active === true
+              ?
+              <Paper className={styles.paperCard}>
+                <form onSubmit={this.submitForm}>
+                  <Typography variant="h6" gutterBottom align="center">
+                    Fill in the form
+                  </Typography>
+                  <Grid item xs={12} sm={9} className={styles.paperCard__item}>
+                    <TextField required name="title" label="Title" fullWidth onChange={this.handleChange} helperText="min. 10 characters"/>
+                  </Grid>
+                  <Grid item xs={12} sm={9} className={styles.paperCard__item}>
+                    <TextField required name="text" label="Describe" fullWidth multiline onChange={this.handleChange} helperText="min. 20 characters"/>
+                  </Grid>
+                  <Grid item xs={12} sm={9} className={styles.paperCard__item}>
+                    <TextField required name="price" label="Price ($)" fullWidth type="number" onChange={this.handleChange}/>
+                  </Grid>
+                  <Grid item xs={12} sm={9} className={styles.paperCard__item}>
+                    <TextField required name="author" label="Email address" fullWidth onChange={this.handleChange} />
+                  </Grid>
+                  <Grid item xs={12} sm={9} className={styles.paperCard__item}>
+                    <TextField name="phone" label="Phone number" fullWidth type="number" onChange={this.handleChange}/>
+                  </Grid>
+                  <Grid item xs={12} sm={9} className={styles.paperCard__item}>
+                    <TextField name="location" label="Localization" fullWidth onChange={this.handleChange}/>
+                  </Grid>
+                  <Grid item xs={12} sm={9} className={styles.paperCard__item}>
+                    <FormControl required fullWidth variant="filled">
+                      <InputLabel id="demo-simple-select-label">Status</InputLabel>
+                      <Select labelId="demo-simple-select-label" fullWidth name="status" value={post.status} onChange={this.handleChange} >
+                        <MenuItem value="draft">Draft</MenuItem>
+                        <MenuItem value="published">Published</MenuItem>
+                        <MenuItem value="finished">Finished</MenuItem>
+                      </Select>
+                    </FormControl>
+                    <FormHelperText>Choose status your announcement</FormHelperText>
+                  </Grid>
+                  <Grid item xs={12} sm={9} className={styles.paperCard__item}>
+                    <Typography variant="body1" gutterBottom align="center">
+                      Add photo
+                    </Typography>
+                    <label className={styles.file}>
+                      <input id='file' type="file" name="photo" accept="image/*" onChange={this.handleImage}></input>
+                    </label>
+                  </Grid>
+                  <Grid item xs={12} sm={9} className={styles.paperCard__item} align="center">
+                    <Button variant="outlined" type="submit" color="secondary" className={styles.paperCard__btn}>
+                      Submit
+                    </Button>
+                  </Grid>
+                </form>
+              </Paper>
+              :
+              <Paper className={styles.paperCard}>
+                <h2 className={styles.paperCard__textError}>Only for logged user</h2>
+                <p>
+                  <Link className={styles.paperCard__link}>Login</Link>
+                </p>
+                <p>
+                  <Link to={'/'} className={styles.paperCard__link}>Back to homepage</Link>
+                </p>
+              </Paper>
+            }
+          </Grid>
+        </Grid>
+      </div>
     );
   }
 }
@@ -190,16 +184,18 @@ Component.propTypes = {
       email: PropTypes.string,
       status: PropTypes.string,
       image: PropTypes.string,
-      price: PropTypes.string,
+      price: PropTypes.number,
       phone: PropTypes.string,
       location: PropTypes.string,
     })
   ),
   addPost: PropTypes.func,
+  user: PropTypes.object,
 };
 
 const mapStateToProps = state => ({
   postsAll: getAll(state),
+  user: state.user,
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -36,13 +36,13 @@ export const fetchPublished = () => {
       dispatch(fetchStarted());
 
       Axios
-      .get('http://localhost:8000/api/posts')
-      .then(res => {
-        dispatch(fetchSuccess(res.data));
-      })
-      .catch(err => {
-        dispatch(fetchError(err.message || true));
-      });
+        .get('http://localhost:8000/api/posts')
+        .then(res => {
+          dispatch(fetchSuccess(res.data));
+        })
+        .catch(err => {
+          dispatch(fetchError(err.message || true));
+        });
     }
   };
 };
@@ -59,8 +59,8 @@ export const fetchPost = (id) => {
       .catch(err => {
         dispatch(fetchError(err.message || true));
       });
-    }
-}
+  };
+};
 
 export const fetchAddPost = (post) => {
   console.log(post);
