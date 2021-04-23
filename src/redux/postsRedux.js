@@ -2,7 +2,7 @@ import Axios from 'axios';
 
 /* selectors */
 export const getAll = ({posts}) => posts.data;
-export const getPost = ({posts}) => posts.data;
+export const getPost = ({posts}) => posts.onePost;
 export const getOnePost = ({posts}, id) => {
   posts.data.filter(post => post._id === id);
 };
@@ -16,6 +16,7 @@ const FETCH_START = createActionName('FETCH_START');
 const FETCH_SUCCESS = createActionName('FETCH_SUCCESS');
 const FETCH_ERROR = createActionName('FETCH_ERROR');
 
+const FETCH_ONE_POST = createActionName('FETCH_ONE_POST');
 const ADD_POST = createActionName('ADD_POST');
 const EDIT_POST = createActionName('EDIT_POST');
 
@@ -24,39 +25,28 @@ export const fetchStarted = payload => ({ payload, type: FETCH_START });
 export const fetchSuccess = payload => ({ payload, type: FETCH_SUCCESS });
 export const fetchError = payload => ({ payload, type: FETCH_ERROR });
 
+export const fetchOnePost = payload => ({ payload, type: FETCH_ONE_POST });
 export const addPost = payload => ({ payload, type: ADD_POST });
 export const editPost = payload => ({ payload, type: EDIT_POST });
 
 /* thunk creators */
 export const fetchPublished = () => {
   return (dispatch, getState) => {
-    // const { posts } = getState();
-    // console.log('posts', posts);
+    const { posts } = getState();
+    console.log('posts', posts);
 
-    // if(posts.data.length === 0 || posts.loading.active === false) {
-    //   dispatch(fetchStarted());
+    if(posts.data.length === 0 || posts.loading.active === false) {
+      dispatch(fetchStarted());
 
-    //   Axios
-    //     .get('http://localhost:8000/api/posts')
-    //     .then(res => {
-    //       dispatch(fetchSuccess(res.data));
-    //     })
-    //     .catch(err => {
-    //       dispatch(fetchError(err.message || true));
-    //     });
-    // }
-    Axios
-      .get('http://localhost:8000/api/posts')
-      .then(res => {
-        const {posts} = getState();
-        console.log('posts', posts);
-        if(!posts.data.length) {
+      Axios
+        .get('http://localhost:8000/api/posts')
+        .then(res => {
           dispatch(fetchSuccess(res.data));
-        }
-      })
-      .catch(err => {
-        dispatch(fetchError(err.message || true));
-      });
+        })
+        .catch(err => {
+          dispatch(fetchError(err.message || true));
+        });
+    }
   };
 };
 
@@ -68,7 +58,8 @@ export const fetchPost = (id) => {
     Axios
       .get(`http://localhost:8000/api/posts/${id}`)
       .then(res => {
-        dispatch(fetchSuccess(res.data));
+        dispatch(fetchOnePost(res.data));
+        // dispatch(fetchSuccess(res.data));
       })
       .catch(err => {
         dispatch(fetchError(err.message || true));
@@ -140,27 +131,37 @@ export const reducer = (statePart = [], action = {}) => {
         },
       };
     }
+    case FETCH_ONE_POST: {
+      return {
+        ...statePart,
+        loading: {
+          active: false,
+          error: false,
+        },
+        onePost: action.payload,
+      };
+    }
     case ADD_POST: {
       return {
         ...statePart,
+        loading: {
+          active: false,
+          error: false,
+        },
         data: [...statePart.data, action.payload],
       };
     }
     case EDIT_POST: {
-      // console.log('statePart', statePart);
-      // console.log('action.payload', action.payload);
-      // const index = statePart.data.findIndex(post => post.id == action.payload.id);
-      // console.log('index', index);
-      // const newArray = [...statePart.data];
-      // console.log('newArray', newArray);
-      // newArray[index] = action.payload;
-      // console.log('newArray[index]', newArray);
+      const statePartIndex = statePart.data.findIndex(post => post._id === action.payload._id);
+      statePart.data.splice(statePartIndex, 1, action.payload);
 
-      // const statePartIndex = statePart.data.findIndex(post => post._id == action.payload._id);
-      // statePart.data.splice(statePartIndex, 1, action.payload);
       return {
         ...statePart,
-        data: action.payload,
+        loading: {
+          active: false,
+          error: false,
+        },
+        data: [...statePart.data],
       };
     }
     default:

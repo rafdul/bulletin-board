@@ -64,7 +64,7 @@ class Component extends React.Component {
 
     const { post } = this.state;
     const { addPost } = this.props;
-    // event.preventDefault();
+    event.preventDefault();
 
     if(post.title.length < 10) return alert('Min. 10 characters in title');
     if(post.text.length < 20) return alert('Min. 20 characters in text');
@@ -77,7 +77,7 @@ class Component extends React.Component {
     if((post.title.length > 9) && (post.text.length > 19) && (post.author.length === authorMatchedJoined.length)) {
       post.created = new Date().toISOString();
       post.updated = post.created;
-      console.log('dodawany post', post);
+      // console.log('dodawany post', post);
       addPost(post);
 
       this.setState({

@@ -22,6 +22,11 @@
       margin: $main-spacing;
       flex-grow: 1;
 
+      .link {
+        text-decoration: none;
+        color: $color-text;
+      }
+
       .image {
         max-height: 40vh;
       }

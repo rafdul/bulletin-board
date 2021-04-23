@@ -51,25 +51,27 @@ class Component extends React.Component {
           {/* {console.log('postsAll w render', postsAll)} */}
           {postsAll.map(post => (
             <Card key={post._id} className={styles.card__item}>
-              <CardActionArea href={`/post/${post._id}`}>
-                <CardMedia
-                  className={styles.image}
-                  component="img"
-                  image={post.photo ? post.photo : 'https://placeimg.com/640/480/tech'}
-                  title={post.photo}
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="h2">
-                    {post.title}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p">
-                    {post.text}
-                  </Typography>
-                  <div className={styles.price}>
-                    <Typography component="p" variant="subtitle2">Price: {post.price}</Typography>
-                    <Typography component="p" variant="subtitle2">Location: {post.location}</Typography>
-                  </div>
-                </CardContent>
+              <CardActionArea>
+                <Link to={`/post/${post._id}`} className={styles.link}>
+                  <CardMedia
+                    className={styles.image}
+                    component="img"
+                    image={post.photo ? post.photo : 'https://placeimg.com/640/480/tech'}
+                    title={post.photo}
+                  />
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="h2">
+                      {post.title}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary" component="p">
+                      {post.text}
+                    </Typography>
+                    <div className={styles.price}>
+                      <Typography component="p" variant="subtitle2">Price: {post.price}</Typography>
+                      <Typography component="p" variant="subtitle2">Location: {post.location}</Typography>
+                    </div>
+                  </CardContent>
+                </Link>
               </CardActionArea>
               <CardActions className={styles.card__btn}>
                 <Button size="small" color="primary" href={`/post/${post._id}`} >

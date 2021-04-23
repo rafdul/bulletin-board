@@ -18,7 +18,7 @@ import clsx from 'clsx';
 
 import { connect } from 'react-redux';
 // import { reduxSelector, reduxActionCreator } from '../../../redux/exampleRedux.js';
-import { fetchEditPost, getAll } from '../../../redux/postsRedux';
+import { fetchEditPost, getPost } from '../../../redux/postsRedux';
 
 import styles from './PostEdit.module.scss';
 
@@ -58,7 +58,7 @@ class Component extends React.Component {
     const { post } = this.state;
     console.log('files', files[0].name);
 
-    if (files != undefined) this.setState({ post: { ...post, photo: files[0].name } });
+    if (files !== undefined) this.setState({ post: { ...post, photo: files[0].name } });
   }
 
   submitForm = (event) => {
@@ -78,8 +78,6 @@ class Component extends React.Component {
     if((post.title.length > 9) && (post.text.length > 19) && (post.author.length === authorMatchedJoined.length)) {
       // post._id = uniqid();
       post.updated = new Date().toISOString();
-      // console.log('edytowany post', post);
-      // console.log(' editPost(post)',  editPost(post));
       editPost(post);
 
       alert('Your post was edit.');
@@ -193,7 +191,7 @@ Component.propTypes = {
 };
 
 const mapStateToProps = (state, props) => ({
-  postById: getAll(state),
+  postById: getPost(state),
   user: state.user,
 });
 
