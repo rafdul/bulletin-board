@@ -4,7 +4,9 @@ import { PostAddComponent } from './PostAdd';
 
 describe('Component PostAdd', () => {
   it('should render without crashing', () => {
-    const component = shallow(<PostAddComponent />);
+    const user = {active: true};
+
+    const component = shallow(<PostAddComponent user={user}/>);
     expect(component).toBeTruthy();
   });
 });

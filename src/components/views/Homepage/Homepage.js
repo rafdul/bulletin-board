@@ -48,14 +48,15 @@ class Component extends React.Component {
           }
         </div>
         <div className={styles.card}>
+          {/* {console.log('postsAll w render', postsAll)} */}
           {postsAll.map(post => (
             <Card key={post._id} className={styles.card__item}>
               <CardActionArea href={`/post/${post._id}`}>
                 <CardMedia
                   className={styles.image}
                   component="img"
-                  image={post.photo}
-                  title={post.title}
+                  image={post.photo ? post.photo : 'https://placeimg.com/640/480/tech'}
+                  title={post.photo}
                 />
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="h2">
@@ -85,7 +86,7 @@ class Component extends React.Component {
 
 Component.propTypes = {
   className: PropTypes.string,
-  postsAll: PropTypes.array,
+  postsAll: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   // postsAll: PropTypes.arrayOf(
   //   PropTypes.shape({
   //     _id: PropTypes.string,

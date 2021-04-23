@@ -4,7 +4,9 @@ import { HeaderComponent } from './Header';
 
 describe('Component Header', () => {
   it('should render without crashing', () => {
-    const component = shallow(<HeaderComponent />);
+    const user = {active: true};
+
+    const component = shallow(<HeaderComponent user={user}/>);
     expect(component).toBeTruthy();
   });
 });

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { NotFound } from '../NotFound/NotFound';
+import ImageUploader from 'react-images-upload';
 
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -14,10 +15,9 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 
 import clsx from 'clsx';
-// import uniqid from 'uniqid';
 
 import { connect } from 'react-redux';
-import {getAll, fetchAddPost, addPost } from '../../../redux/postsRedux';
+import {getAll, fetchAddPost} from '../../../redux/postsRedux';
 
 import styles from './PostAdd.module.scss';
 
@@ -29,7 +29,7 @@ class Component extends React.Component {
       title: '',
       text: '',
       price: '',
-      photo: '',
+      photo: null,
       author: '',
       location: '',
       phone: '',
@@ -46,18 +46,25 @@ class Component extends React.Component {
     // console.log('this.state', this.state);
   };
 
-  handleImage = (file) => {
+  handleChangePrice = (event) => {
     const { post } = this.state;
 
-    if (file) this.setState({ post: { ...post, [post.photo]: file[0] } });
-    else this.setState({ post: { ...post, photo: null } });
+    this.setState({ post: { ...post, [event.target.name]: parseInt(event.target.value) } });
+    // console.log('this.state', this.state);
+  };
+
+  handleImage = (files) => {
+    const { post } = this.state;
+    // console.log('files', files[0].name);
+
+    if (files !== undefined) this.setState({ post: { ...post, photo: files[0].name } });
   }
 
   submitForm = (event) => {
 
     const { post } = this.state;
     const { addPost } = this.props;
-    event.preventDefault();
+    // event.preventDefault();
 
     if(post.title.length < 10) return alert('Min. 10 characters in title');
     if(post.text.length < 20) return alert('Min. 20 characters in text');
@@ -68,7 +75,6 @@ class Component extends React.Component {
     if(authorMatchedJoined.length < post.author.length) return alert('Wrong format email');
 
     if((post.title.length > 9) && (post.text.length > 19) && (post.author.length === authorMatchedJoined.length)) {
-      // post._id = uniqid();
       post.created = new Date().toISOString();
       post.updated = post.created;
       console.log('dodawany post', post);
@@ -117,7 +123,7 @@ class Component extends React.Component {
                     <TextField required name="text" label="Describe" fullWidth multiline onChange={this.handleChange} helperText="min. 20 characters"/>
                   </Grid>
                   <Grid item xs={12} sm={9} className={styles.paperCard__item}>
-                    <TextField required name="price" label="Price ($)" fullWidth type="number" onChange={this.handleChange}/>
+                    <TextField required name="price" label="Price ($)" fullWidth type="number" onChange={this.handleChangePrice}/>
                   </Grid>
                   <Grid item xs={12} sm={9} className={styles.paperCard__item}>
                     <TextField required name="author" label="Email address" fullWidth onChange={this.handleChange} />
@@ -143,9 +149,16 @@ class Component extends React.Component {
                     <Typography variant="body1" gutterBottom align="center">
                       Add photo
                     </Typography>
-                    <label className={styles.file}>
-                      <input id='file' type="file" name="photo" accept="image/*" onChange={this.handleImage}></input>
-                    </label>
+                    <ImageUploader
+                      withIcon={true}
+                      buttonText='Choose image'
+                      imgExtension={['.jpg', '.gif', '.png', '.gif']}
+                      maxFileSize={5242880}
+                      withPreview={true}
+                      onChange={this.handleImage}
+                      singleImage={true}
+                      className={styles.file}
+                    />
                   </Grid>
                   <Grid item xs={12} sm={9} className={styles.paperCard__item} align="center">
                     <Button variant="outlined" type="submit" color="secondary" className={styles.paperCard__btn}>
@@ -155,15 +168,7 @@ class Component extends React.Component {
                 </form>
               </Paper>
               :
-              <Paper className={styles.paperCard}>
-                <h2 className={styles.paperCard__textError}>Only for logged user</h2>
-                <p>
-                  <Link className={styles.paperCard__link}>Login</Link>
-                </p>
-                <p>
-                  <Link to={'/'} className={styles.paperCard__link}>Back to homepage</Link>
-                </p>
-              </Paper>
+              <NotFound />
             }
           </Grid>
         </Grid>
@@ -200,7 +205,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   addPost: (post) => dispatch(fetchAddPost(post)),
-  // addPost: (post) => dispatch(addPost(post)),
 });
 
 const Container = connect(mapStateToProps, mapDispatchToProps)(Component);

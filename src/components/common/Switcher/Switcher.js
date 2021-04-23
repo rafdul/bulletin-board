@@ -33,7 +33,7 @@ class Component extends React.Component {
   };
 
   render() {
-    const {className, user} = this.props;
+    const {className} = this.props;
 
     return(
       <div>

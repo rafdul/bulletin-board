@@ -17,8 +17,9 @@ describe('Component PostEdit', () => {
       phone: '432543654',
       location: 'Paris',
     };
+    const user = {active: true};
 
-    const component = shallow(<PostEditComponent postById={posts}/>);
+    const component = shallow(<PostEditComponent postById={posts} user={user}/>);
     expect(component).toBeTruthy();
   });
 });

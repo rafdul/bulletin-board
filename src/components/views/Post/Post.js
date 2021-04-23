@@ -5,8 +5,6 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAt, faPhoneAlt, faMapMarkedAlt } from '@fortawesome/free-solid-svg-icons';
 
-// import StatusUserContext from '../../../context/StatusContext';
-
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -18,7 +16,7 @@ import clsx from 'clsx';
 
 import { connect } from 'react-redux';
 // import { reduxSelector, reduxActionCreator } from '../../../redux/exampleRedux.js';
-import { getPost, fetchPost, getOnePost } from '../../../redux/postsRedux';
+import { getPost, fetchPost } from '../../../redux/postsRedux';
 
 import styles from './Post.module.scss';
 
