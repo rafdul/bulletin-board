@@ -9,13 +9,11 @@ import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-// import LinkUI from '@material-ui/core/Link';
 import Fab from '@material-ui/core/Fab';
 
 import clsx from 'clsx';
 
 import { connect } from 'react-redux';
-// import { reduxSelector, reduxActionCreator } from '../../../redux/exampleRedux.js';
 import { getPost, fetchPost } from '../../../redux/postsRedux';
 
 import styles from './Post.module.scss';

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { NotFound } from '../NotFound/NotFound';
+import { NotFound } from '../../views/NotFound/NotFound';
 import ImageUploader from 'react-images-upload';
 
 import Grid from '@material-ui/core/Grid';
@@ -17,24 +17,25 @@ import FormControl from '@material-ui/core/FormControl';
 import clsx from 'clsx';
 
 import { connect } from 'react-redux';
-import { fetchEditPost, getPost } from '../../../redux/postsRedux';
+import {fetchAddPost, fetchEditPost, getPost} from '../../../redux/postsRedux';
 
-import styles from './PostEdit.module.scss';
+import styles from './FormPost.module.scss';
 
 class Component extends React.Component {
+
   state = {
     post: {
-      _id: this.props.postById._id,
-      title: this.props.postById.title,
-      text: this.props.postById.text,
-      price: this.props.postById.price,
-      photo: this.props.postById.photo,
-      author: this.props.postById.author,
-      location: this.props.postById.location,
-      phone: this.props.postById.phone,
-      status: this.props.postById.status,
-      created: this.props.postById.created,
-      updated: this.props.postById.updated,
+      _id: this.props.isNewAnnounce ? '' : this.props.postById._id,
+      title: this.props.isNewAnnounce ? '' : this.props.postById.title,
+      text: this.props.isNewAnnounce ? '' : this.props.postById.text,
+      price: this.props.isNewAnnounce ? '' : this.props.postById.price,
+      photo: this.props.isNewAnnounce ? null : this.props.postById.photo,
+      author: this.props.isNewAnnounce ? '' : this.props.postById.author,
+      location: this.props.isNewAnnounce ? '' : this.props.postById.location,
+      phone: this.props.isNewAnnounce ? '' : this.props.postById.phone,
+      status: this.props.isNewAnnounce ? '' : this.props.postById.status,
+      created: this.props.isNewAnnounce ? '' : this.props.postById.created,
+      updated: this.props.isNewAnnounce ? '' : this.props.postById.updated,
     },
   };
 
@@ -42,6 +43,7 @@ class Component extends React.Component {
     const { post } = this.state;
 
     this.setState({ post: { ...post, [event.target.name]: event.target.value } });
+    // console.log('this.state', this.state);
   };
 
   handleChangePrice = (event) => {
@@ -53,7 +55,6 @@ class Component extends React.Component {
 
   handleImage = (files) => {
     const { post } = this.state;
-    console.log('files', files[0].name);
 
     if (files !== undefined) this.setState({ post: { ...post, photo: files[0].name } });
   }
@@ -61,7 +62,8 @@ class Component extends React.Component {
   submitForm = (event) => {
 
     const { post } = this.state;
-    const { editPost } = this.props;
+    const { addPost, editPost, isNewAnnounce } = this.props;
+    console.log('isNewAnnounce w submitForm', isNewAnnounce);
     event.preventDefault();
 
     if(post.title.length < 10) return alert('Min. 10 characters in title');
@@ -73,23 +75,47 @@ class Component extends React.Component {
     if(authorMatchedJoined.length < post.author.length) return alert('Wrong format email');
 
     if((post.title.length > 9) && (post.text.length > 19) && (post.author.length === authorMatchedJoined.length)) {
-      // post._id = uniqid();
-      post.updated = new Date().toISOString();
-      editPost(post);
+      if(isNewAnnounce) {
+        post.created = new Date().toISOString();
+        post.updated = post.created;
+        // console.log('dodawany post', post);
+        addPost(post);
 
-      alert('Your post was edit.');
+        this.setState({
+          post: {
+            // _id: '',
+            title: '',
+            text: '',
+            price: '',
+            photo: '',
+            author: '',
+            location: '',
+            phone: '',
+            status: '',
+            created: '',
+            updated: '',
+          },
+        });
+
+        alert('Your post was added.');
+      } else {
+        post.updated = new Date().toISOString();
+        editPost(post);
+
+        alert('Your post was edit.');
+      }
     }
-  }
+  };
 
   render() {
-    const { className, postById, user } = this.props;
-    const {post} = this.state;
+    const {className, user, postById, isNewAnnounce } = this.props;
+    const { post } = this.state;
 
-    // console.log('postById w postEdit', postById);
+    console.log('isNewAnnounce', isNewAnnounce);
 
     return(
       <div className={clsx(className, styles.root)}>
-        <h2>Edit &quot;{postById.title}&quot; </h2>
+        <h2>{isNewAnnounce ? 'Add new post' : 'Edit post'}</h2>
         <Grid container spacing={3} className={styles.addContainer} justify="center">
           <Grid item xs={12} sm={9}>
             {user.active === true
@@ -97,25 +123,25 @@ class Component extends React.Component {
               <Paper className={styles.paperCard}>
                 <form onSubmit={this.submitForm}>
                   <Typography variant="h6" gutterBottom align="center">
-                    Edit your announcement
+                    {isNewAnnounce ? 'Fill in the form' : 'Edit your announcement'}
                   </Typography>
                   <Grid item xs={12} sm={9} className={styles.paperCard__item}>
-                    <TextField required defaultValue={postById.title} name="title" label="Title" fullWidth onChange={this.handleChange} helperText="min. 10 characters" className={styles.textInput}/>
+                    <TextField required name="title" label="Title" defaultValue={isNewAnnounce ? '' : postById.title} fullWidth onChange={this.handleChange} helperText="min. 10 characters"/>
                   </Grid>
                   <Grid item xs={12} sm={9} className={styles.paperCard__item}>
-                    <TextField required defaultValue={postById.text} name="text" label="Describe" fullWidth multiline onChange={this.handleChange} helperText="min. 20 characters"/>
+                    <TextField required name="text" label="Describe" defaultValue={isNewAnnounce ? '' : postById.text} fullWidth multiline onChange={this.handleChange} helperText="min. 20 characters"/>
                   </Grid>
                   <Grid item xs={12} sm={9} className={styles.paperCard__item}>
-                    <TextField required defaultValue={postById.price} name="price" label="Price ($)" fullWidth type="number" onChange={this.handleChangePrice}/>
+                    <TextField required name="price" label="Price ($)" defaultValue={isNewAnnounce ? '' : postById.price} fullWidth type="number" onChange={this.handleChangePrice}/>
                   </Grid>
                   <Grid item xs={12} sm={9} className={styles.paperCard__item}>
-                    <TextField required defaultValue={postById.author} name="author" label="Email address" fullWidth onChange={this.handleChange} />
+                    <TextField required name="author" label="Email address" defaultValue={isNewAnnounce ? '' : postById.author} fullWidth onChange={this.handleChange} />
                   </Grid>
                   <Grid item xs={12} sm={9} className={styles.paperCard__item}>
-                    <TextField defaultValue={postById.phone} name="phone" label="Phone number" fullWidth type="number" onChange={this.handleChange}/>
+                    <TextField name="phone" label="Phone number" defaultValue={isNewAnnounce ? '' : postById.phone} fullWidth type="number" onChange={this.handleChange}/>
                   </Grid>
                   <Grid item xs={12} sm={9} className={styles.paperCard__item}>
-                    <TextField defaultValue={postById.location} name="location" label="Localization" fullWidth onChange={this.handleChange}/>
+                    <TextField name="location" label="Localization" defaultValue={isNewAnnounce ? '' : postById.location} fullWidth onChange={this.handleChange}/>
                   </Grid>
                   <Grid item xs={12} sm={9} className={styles.paperCard__item}>
                     <FormControl required fullWidth variant="filled">
@@ -132,9 +158,11 @@ class Component extends React.Component {
                     <Typography variant="body1" gutterBottom align="center">
                       Add photo
                     </Typography>
-                    <Typography variant="body2" gutterBottom align="center">
-                      Your photo: {postById.photo}
-                    </Typography>
+                    {isNewAnnounce ? null :
+                      <Typography variant="body2" gutterBottom align="center">
+                        Your photo: {postById.photo}
+                      </Typography>
+                    }
                     <ImageUploader
                       withIcon={true}
                       buttonText='Choose image'
@@ -165,40 +193,27 @@ class Component extends React.Component {
 
 Component.propTypes = {
   className: PropTypes.string,
+  user: PropTypes.object,
+  isNewAnnounce: PropTypes.bool,
   postById: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-  // postById: PropTypes.arrayOf(
-  //   PropTypes.shape({
-  //     id: PropTypes.string,
-  //     title: PropTypes.string,
-  //     content: PropTypes.string,
-  //     datePublication: PropTypes.string,
-  //     dateLastUpdate: PropTypes.string,
-  //     email: PropTypes.string,
-  //     status: PropTypes.string,
-  //     image: PropTypes.string,
-  //     price: PropTypes.number,
-  //     phone: PropTypes.string,
-  //     location: PropTypes.string,
-  //   }),
-  // ),
   addPost: PropTypes.func,
   editPost: PropTypes.func,
-  user: PropTypes.object,
 };
 
-const mapStateToProps = (state, props) => ({
+const mapStateToProps = state => ({
   postById: getPost(state),
   user: state.user,
 });
 
 const mapDispatchToProps = dispatch => ({
+  addPost: (post) => dispatch(fetchAddPost(post)),
   editPost: (post) => dispatch(fetchEditPost(post)),
 });
 
 const Container = connect(mapStateToProps, mapDispatchToProps)(Component);
 
 export {
-  // Component as PostEdit,
-  Container as PostEdit,
-  Component as PostEditComponent,
+  // Component as FormPost,
+  Container as FormPost,
+  Component as FormPostComponent,
 };

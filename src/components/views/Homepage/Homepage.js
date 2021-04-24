@@ -15,12 +15,9 @@ import Fab from '@material-ui/core/Fab';
 import clsx from 'clsx';
 
 import { connect } from 'react-redux';
-// import { reduxSelector, reduxActionCreator } from '../../../redux/exampleRedux.js';
 import { getAll, fetchPublished } from '../../../redux/postsRedux';
-// import { getStatusUser } from '../../../redux/statusUserRedux';
 
 import styles from './Homepage.module.scss';
-
 
 class Component extends React.Component {
 
@@ -48,7 +45,6 @@ class Component extends React.Component {
           }
         </div>
         <div className={styles.card}>
-          {/* {console.log('postsAll w render', postsAll)} */}
           {postsAll.map(post => (
             <Card key={post._id} className={styles.card__item}>
               <CardActionArea>
@@ -56,7 +52,7 @@ class Component extends React.Component {
                   <CardMedia
                     className={styles.image}
                     component="img"
-                    image={post.photo ? post.photo : 'https://placeimg.com/640/480/tech'}
+                    image={post.photo}
                     title={post.photo}
                   />
                   <CardContent>
@@ -113,7 +109,6 @@ Component.propTypes = {
 const mapStateToProps = state => ({
   postsAll: getAll(state),
   user: state.user,
-  // someProp: reduxSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -19,7 +19,6 @@ router.get('/posts', async (req, res) => {
 
 router.get('/posts/:id', async (req, res) => {
   try {
-    console.log('req.params w get/id', req.params);
     const result = await Post
       .findById(req.params.id);
     if(!result) res.status(404).json({ post: 'Not found' });
@@ -80,16 +79,11 @@ router.post('/posts/add', async (req, res) => {
 
 router.put('/posts/:id/edit', async (req, res) => {
   try {
-    console.log('req.body w put',req.body);
-    // console.log('req', req);
-    console.log('req.params w put', req.params);
     const { title, text, author, created, updated, status, photo, price, phone, location } = req.body;
     const editedPost = await(Post.findById(req.params.id));
-    console.log('editedPost', editedPost);
 
     if(editedPost) {
       const changedPost = await (Post.updateOne({ _id: req.params.id }, {$set: { title, text, author, created, updated, status, photo, price, phone, location }}));
-      console.log('changedPost', changedPost);
       res.json(changedPost);
     }
     else {

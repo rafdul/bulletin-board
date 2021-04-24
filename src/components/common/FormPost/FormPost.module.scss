@@ -1,0 +1,30 @@
+@import '../../../styles/settings.scss';
+
+.root {
+  .addContainer {
+    .paperCard {
+      padding: $base-size * 2 $base-size;
+
+      &__item {
+        margin: $base-size auto;
+      }
+
+      &__btn {
+        margin-top: $base-size;
+      }
+
+      &__textError {
+        color: $color-text-error;
+      }
+
+      &__link{
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
+  }
+}

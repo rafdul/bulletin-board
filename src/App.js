@@ -11,8 +11,9 @@ import { store } from './redux/store';
 import { MainLayout } from './components/layout/MainLayout/MainLayout';
 import { Homepage } from './components/views/Homepage/Homepage';
 import { Post } from './components/views/Post/Post';
-import { PostEdit } from './components/views/PostEdit/PostEdit';
-import { PostAdd } from './components/views/PostAdd/PostAdd';
+// import { PostEdit } from './components/views/PostEdit/PostEdit';
+// import { PostAdd } from './components/views/PostAdd/PostAdd';
+import { FormPost } from './components/common/FormPost/FormPost';
 import { NotFound } from './components/views/NotFound/NotFound';
 import {Switcher} from './components/common/Switcher/Switcher';
 
@@ -32,10 +33,9 @@ const App = () => (
           <MainLayout>
             <Switch>
               <Route exact path='/' component={Homepage} />
-              {/* <Route exact path='/' render={(props) => <Homepage {...props}/>} /> */}
-              <Route exact path='/post/add' component={PostAdd} />
+              <Route exact path='/post/add' render={() => <FormPost isNewAnnounce={true}/>} />
               <Route exact path='/post/:id' component={Post} />
-              <Route exact path='/post/:id/edit' component={PostEdit} />
+              <Route exact path='/post/:id/edit' render={() => <FormPost isNewAnnounce={false}/>} />
               <Route path='*' component={NotFound} />
             </Switch>
           </MainLayout>

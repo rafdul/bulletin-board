@@ -2,32 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Header} from '../Header/Header';
 
-// import StatusUserContext from '../../../context/StatusContext';
-
 import clsx from 'clsx';
 
-// import { connect } from 'react-redux';
-// import { reduxSelector, reduxActionCreator } from '../../../redux/exampleRedux.js';
 
 import styles from './MainLayout.module.scss';
 
 const Component = ({className, children}) => {
 
-  // const [ statusUserTrue , setStatusUser ] = useState(true);
-  // console.log('children', children);
-  // console.log('children.props.children', children.props.children);
-
   return(
     <div className={clsx(className, styles.root)}>
       <div className={styles.container}>
         <Header />
-        {/* <Switcher setStatusUser={setStatusUser}/> */}
-        {/* <Header statusTrue={statusTrue} /> */}
-        {/* {React.cloneElement(<Header />, { statusUserTrue: statusUserTrue })} */}
         {children}
-        {/* <StatusUserContext.Provider value={{statusUserTrue}}>
-          {children}
-        </StatusUserContext.Provider> */}
       </div>
     </div>
   );
@@ -36,7 +22,6 @@ const Component = ({className, children}) => {
 Component.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
-  // props: PropTypes.bool,
 };
 
 // const mapStateToProps = state => ({
