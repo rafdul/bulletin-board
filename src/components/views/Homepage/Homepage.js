@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { IMAGES_URL } from '../../../config';
 
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -46,35 +47,39 @@ class Component extends React.Component {
         </div>
         <div className={styles.card}>
           {postsAll.map(post => (
-            <Card key={post._id} className={styles.card__item}>
-              <CardActionArea>
-                <Link to={`/post/${post._id}`} className={styles.link}>
-                  <CardMedia
-                    className={styles.image}
-                    component="img"
-                    image={post.photo}
-                    title={post.photo}
-                  />
-                  <CardContent>
-                    <Typography gutterBottom variant="h5" component="h2">
-                      {post.title}
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary" component="p">
-                      {post.text}
-                    </Typography>
-                    <div className={styles.price}>
-                      <Typography component="p" variant="subtitle2">Price: {post.price}</Typography>
-                      <Typography component="p" variant="subtitle2">Location: {post.location}</Typography>
+            <div key={post._id} className={styles.card__item}>
+              <Card  className={styles.flex}>
+                <CardActionArea>
+                  <Link to={`/post/${post._id}`} className={styles.link}>
+                    <div className={styles.imageConatiner}>
+                      <CardMedia
+                        className={styles.image}
+                        component="img"
+                        image={`${IMAGES_URL}/${post.photo}`}
+                        title={post.photo}
+                      />
                     </div>
-                  </CardContent>
-                </Link>
-              </CardActionArea>
-              <CardActions className={styles.card__btn}>
-                <Button size="small" color="primary" href={`/post/${post._id}`} >
-                  Show more
-                </Button>
-              </CardActions>
-            </Card>
+                    <CardContent>
+                      <Typography gutterBottom variant="h5" component="h2">
+                        {post.title}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary" component="p">
+                        {post.text}
+                      </Typography>
+                      <div className={styles.price}>
+                        <Typography component="p" variant="subtitle2">Price: {post.price}</Typography>
+                        <Typography component="p" variant="subtitle2">Location: {post.location}</Typography>
+                      </div>
+                    </CardContent>
+                  </Link>
+                </CardActionArea>
+                <CardActions className={styles.card__btn}>
+                  <Button size="small" color="primary" href={`/post/${post._id}`} >
+                    Show more
+                  </Button>
+                </CardActions>
+              </Card>
+            </div>
           ))}
         </div>
       </div>

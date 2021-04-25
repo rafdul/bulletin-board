@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { IMAGES_URL } from '../../../config';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAt, faPhoneAlt, faMapMarkedAlt } from '@fortawesome/free-solid-svg-icons';
@@ -29,6 +30,7 @@ class Component extends React.Component {
 
   render() {
     const {className, postById, user} = this.props;
+    console.log('postById:', postById);
 
     return(
       <div className={clsx(className, styles.root)}>
@@ -36,7 +38,7 @@ class Component extends React.Component {
         <Grid container spacing={3} className={styles.postContainer}>
           <Grid item xs={12} sm={5} className={styles.postItem}>
             <div className={styles.postItem__imageBox}>
-              <img src={postById.photo} alt={postById.title} className={styles.postImage}/>
+              <img src={`${IMAGES_URL}/${postById.photo}`} alt={postById.title} className={styles.postImage}/>
             </div>
           </Grid>
           <Grid item xs={12} sm={7} className={styles.postItem}>

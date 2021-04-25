@@ -36,7 +36,9 @@ class Component extends React.Component {
       status: this.props.isNewAnnounce ? '' : this.props.postById.status,
       created: this.props.isNewAnnounce ? '' : this.props.postById.created,
       updated: this.props.isNewAnnounce ? '' : this.props.postById.updated,
+      file: null,
     },
+    // file: [],
   };
 
   handleChange = (event) => {
@@ -48,22 +50,33 @@ class Component extends React.Component {
 
   handleChangePrice = (event) => {
     const { post } = this.state;
+    console.log('event.target', event.target);
 
     this.setState({ post: { ...post, [event.target.name]: parseInt(event.target.value) } });
     // console.log('this.state', this.state);
   };
 
-  handleImage = (files) => {
+  handleImage = (file, event) => {
     const { post } = this.state;
+    // const file = event.target.files;
+    console.log('post w handleimage', post);
+    console.log('event.target', event.target);
+    console.log('file', file[0]);
+    console.log('event', event);
 
-    if (files !== undefined) this.setState({ post: { ...post, photo: files[0].name } });
+    // if (file !== undefined) this.setState({ post: { ...post, photo: file[0].name }});
+    if (file !== undefined) this.setState({ post: { ...post, photo: file[0].name, file: file[0] } });
+
   }
 
   submitForm = (event) => {
 
     const { post } = this.state;
     const { addPost, editPost, isNewAnnounce } = this.props;
+    console.log('post w submitform', post);
     console.log('isNewAnnounce w submitForm', isNewAnnounce);
+
+    console.log('this.state.file', this.state.file);
     event.preventDefault();
 
     if(post.title.length < 10) return alert('Min. 10 characters in title');
@@ -78,8 +91,18 @@ class Component extends React.Component {
       if(isNewAnnounce) {
         post.created = new Date().toISOString();
         post.updated = post.created;
+
+        const formData = new FormData();
+        for (let key of ['_id', 'title', 'text', 'price', 'photo', 'author', 'location', 'phone', 'status', 'created', 'updated']) {
+          formData.append(key, post[key]);
+        }
+        formData.append('file', post.file);
+        addPost(formData);
+        console.log('formData w add', formData);
+
         // console.log('dodawany post', post);
-        addPost(post);
+        // console.log('addPost(post)', addPost(post));
+        // addPost(post);
 
         this.setState({
           post: {
@@ -100,7 +123,18 @@ class Component extends React.Component {
         alert('Your post was added.');
       } else {
         post.updated = new Date().toISOString();
-        editPost(post);
+
+        const formData = new FormData();
+        for (let key of ['_id', 'title', 'text', 'price', 'photo', 'author', 'location', 'phone', 'status', 'created', 'updated']) {
+          formData.append(key, post[key]);
+        }
+        formData.append('file', post.file);
+        editPost(formData);
+        console.log('formData w edit', formData);
+
+        // console.log('dodawany post', post);
+        // console.log('editPost(post)', editPost(post));
+        // editPost(post);
 
         alert('Your post was edit.');
       }
@@ -120,8 +154,9 @@ class Component extends React.Component {
           <Grid item xs={12} sm={9}>
             {user.active === true
               ?
-              <Paper className={styles.paperCard}>
-                <form onSubmit={this.submitForm}>
+              <Paper className={styles.paperCard} >
+                {/* <form onSubmit={this.submitForm} method="put" encType="multipart/form-data" action={`/posts/${postById.photo}/edit`}> */}
+                <form onSubmit={this.submitForm} >
                   <Typography variant="h6" gutterBottom align="center">
                     {isNewAnnounce ? 'Fill in the form' : 'Edit your announcement'}
                   </Typography>
@@ -163,7 +198,12 @@ class Component extends React.Component {
                         Your photo: {postById.photo}
                       </Typography>
                     }
+                    {/* <div onChange={this.handleSubmit}>
+                      <input type="file" name="image" accept="image/*" ref={this.fileInput} ></input>
+                    </div> */}
+
                     <ImageUploader
+                      name="file"
                       withIcon={true}
                       buttonText='Choose image'
                       imgExtension={['.jpg', '.gif', '.png', '.gif']}

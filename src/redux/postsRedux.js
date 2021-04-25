@@ -72,7 +72,7 @@ export const fetchAddPost = (post) => {
   return (dispatch, getState) => {
     dispatch(fetchStarted());
     Axios
-      .post('http://localhost:8000/api/posts/add', post)
+      .post('http://localhost:8000/api/posts/add', post, {headers: {'Content-Type': 'multipart/form-data'}})
       .then(res => {
         dispatch(addPost(post));
       })
@@ -83,12 +83,12 @@ export const fetchAddPost = (post) => {
   };
 };
 
-export const fetchEditPost = (post) => {
+export const fetchEditPost = (post, id) => {
   // console.log('post w fetchEditPost', post);
   return (dispatch, getState) => {
     dispatch(fetchStarted());
     Axios
-      .put(`http://localhost:8000/api/posts/${post._id}/edit`, post)
+      .put(`http://localhost:8000/api/posts/${id}/edit`, post, {headers: {'Content-Type': 'multipart/form-data'}})
       .then(res => {
         dispatch(editPost(post));
       })
@@ -154,6 +154,7 @@ export const reducer = (statePart = [], action = {}) => {
     case EDIT_POST: {
       const statePartIndex = statePart.data.findIndex(post => post._id === action.payload._id);
       statePart.data.splice(statePartIndex, 1, action.payload);
+      console.log('action.payload', action.payload);
 
       return {
         ...statePart,

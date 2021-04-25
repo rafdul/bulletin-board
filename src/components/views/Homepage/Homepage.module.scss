@@ -14,22 +14,33 @@
   .card{
     display: flex;
     justify-content: space-between;
+    align-items: stretch;
     flex-basis: 100%;
     flex-wrap: wrap;
+    align-content: stretch;
 
     &__item {
       flex-basis: 30%;
       margin: $main-spacing;
       flex-grow: 1;
+      align-self: stretch;
+
+      .flex{
+        height: 100%;
+      }
 
       .link {
         text-decoration: none;
         color: $color-text;
       }
 
-      .image {
-        max-height: 40vh;
+      .imageContainer {
+
+        .image {
+          max-height: 40vh;
+        }
       }
+
 
       .price {
         margin-top: $main-spacing;
