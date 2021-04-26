@@ -27,4 +27,20 @@
     }
 
   }
+
+  .snackbarr__success {
+    bottom: 100px;
+
+    div:nth-child(1){
+      background-color: rgb(0, 66, 0);
+    }
+  }
+
+  .snackbarr__error {
+    bottom: 100px;
+
+    div:nth-child(1){
+      background-color: rgb(189, 2, 2);
+    }
+  }
 }

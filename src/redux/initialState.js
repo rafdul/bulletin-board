@@ -57,6 +57,8 @@ export const initialState = {
     loading: {
       active: false,
       error: false,
+      addOnePost: false,
+      editOnePost: false,
     },
     onePost: {
 

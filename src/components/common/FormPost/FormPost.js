@@ -13,12 +13,13 @@ import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
+import Snackbar from '@material-ui/core/Snackbar';
 
 import clsx from 'clsx';
 import styles from './FormPost.module.scss';
 
 import { connect } from 'react-redux';
-import {fetchAddPost, fetchEditPost, getPost} from '../../../redux/postsRedux';
+import {fetchAddPost, fetchEditPost, getPost, getLoading} from '../../../redux/postsRedux';
 
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -41,6 +42,14 @@ class Component extends React.Component {
       updated: this.props.isNewAnnounce ? '' : this.props.postById.updated,
       file: null,
     },
+    transition: undefined,
+    open: true,
+  };
+
+
+
+  handleClose = () => {
+    this.setState({open: false});
   };
 
   // handleChange = (event) => {
@@ -146,9 +155,10 @@ class Component extends React.Component {
 
 
   render() {
-    const {className, user, postById, isNewAnnounce, addPost, editPost } = this.props;
-    const { post } = this.state;
+    const {className, user, postById, isNewAnnounce, addPost, editPost, loading } = this.props;
+    const { post, transition, open } = this.state;
 
+    console.log('loading w formularzu', loading);
     console.log('isNewAnnounce', isNewAnnounce);
 
     return(
@@ -346,8 +356,39 @@ class Component extends React.Component {
                     </Form>
                   )}
 
+
                 </Formik>
 
+                {(loading && loading.addOnePost) &&
+                  <Snackbar
+                    open={open}
+                    autoHideDuration={6000}
+                    onClose={this.handleClose}
+                    message="Your post was added"
+                    TransitionComponent={transition}
+                    className={styles.snackbarr__success}
+                  />
+                }
+                {(loading && loading.editOnePost) &&
+                  <Snackbar
+                    open={open}
+                    autoHideDuration={6000}
+                    onClose={this.handleClose}
+                    message="Your post was edited"
+                    TransitionComponent={transition}
+                    className={styles.snackbarr__success}
+                  />
+                }
+                {(loading && loading.error) &&
+                  <Snackbar
+                    open={open}
+                    autoHideDuration={6000}
+                    onClose={this.handleClose}
+                    message="Something went wrong"
+                    TransitionComponent={transition}
+                    className={styles.snackbarr__error}
+                  />
+                }
 
                 {/* <form onSubmit={this.submitForm} >
                   <Typography variant="h6" gutterBottom align="center">
@@ -427,11 +468,13 @@ Component.propTypes = {
   postById: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   addPost: PropTypes.func,
   editPost: PropTypes.func,
+  loading: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
   postById: getPost(state),
   user: state.user,
+  loading: getLoading(state),
 });
 
 const mapDispatchToProps = dispatch => ({

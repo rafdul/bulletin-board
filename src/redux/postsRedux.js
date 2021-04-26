@@ -6,6 +6,8 @@ export const getPost = ({posts}) => posts.onePost;
 export const getOnePost = ({posts}, id) => {
   posts.data.filter(post => post._id === id);
 };
+// export const getLoading = ({ posts }, name) => posts.loading[name];
+export const getLoading = ({ posts }) => posts.loading;
 
 /* action name creator */
 const reducerName = 'posts';
@@ -17,7 +19,7 @@ const FETCH_SUCCESS = createActionName('FETCH_SUCCESS');
 const FETCH_ERROR = createActionName('FETCH_ERROR');
 
 const FETCH_ONE_POST = createActionName('FETCH_ONE_POST');
-const ADD_POST = createActionName('ADD_POST');
+export const ADD_POST = createActionName('ADD_POST');
 const EDIT_POST = createActionName('EDIT_POST');
 
 /* action creators */
@@ -147,6 +149,7 @@ export const reducer = (statePart = [], action = {}) => {
         loading: {
           active: false,
           error: false,
+          addOnePost: true,
         },
         data: [...statePart.data, action.payload],
       };
@@ -161,6 +164,7 @@ export const reducer = (statePart = [], action = {}) => {
         loading: {
           active: false,
           error: false,
+          editOnePost: true,
         },
         data: [...statePart.data],
       };
