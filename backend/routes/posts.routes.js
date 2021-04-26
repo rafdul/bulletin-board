@@ -55,7 +55,6 @@ router.post('/posts/add', async (req, res) => {
     const { title, text, author, created, updated, status, photo, price, phone, location} = req.fields;
     const file = req.files.file;
     console.log('file',file);
-    console.log('file.path',file.path);
 
     const authorPattern = new RegExp('^[a-zA-Z0-9][a-zA-Z0-9_.-]+@[a-zA-Z0-9][a-zA-Z0-9_.-]+\.{1,3}[a-zA-Z]{2,4}');
     const contentPattern = new RegExp(/(.)*/, 'g');
@@ -76,20 +75,25 @@ router.post('/posts/add', async (req, res) => {
 
     if((authorMatched.length == author.length) && (titleMatched.length == title.length) && (textMatched.length == text.length)) {
 
-      const parseName = file.path.replace(/\\/g, '&#92;');
-      const newNameFile = parseName.split('&#92;').slice(-1)[0];
-      console.log('newName', newNameFile);
-      const fileNameExt = newNameFile.split('.').slice(-1)[0];
-      console.log('fileNameExt', fileNameExt);
+      let newNameFile = null;
+      let fileNameExt = null;
 
-      if(fileNameExt == 'jpg' || fileNameExt == 'png' || fileNameExt == 'gif') {
-        const newPost = new Post({ title, text, author, created, updated, status, photo: newNameFile, price, phone, location});
-        await newPost.save();
-        console.log('newPost', newPost);
-        res.json(newPost);
-      } else {
-        throw res.json('Try one more');
+      if(file !== undefined) {
+        const parseName = file.path.replace(/\\/g, '&#92;');
+        newNameFile = parseName.split('&#92;').slice(-1)[0];
       }
+
+      if(newNameFile !== null) {
+        fileNameExt = newNameFile.split('.').slice(-1)[0];
+        if((fileNameExt !== 'jpg') && (fileNameExt !== 'png') && (fileNameExt !== 'gif')) {
+          throw new Error('Wrong format file');
+        }
+      }
+
+      const newPost = new Post({ title, text, author, created, updated, status, photo: newNameFile, price, phone, location});
+      await newPost.save();
+      console.log('newPost', newPost);
+      res.json(newPost);
 
     } else {
       throw new Error('Wrong input!');
@@ -102,18 +106,11 @@ router.post('/posts/add', async (req, res) => {
 
 router.put(`/posts/:id/edit`, async (req, res) => {
   try {
-
     const { title, text, author, created, updated, status, photo, price, phone, location} = req.fields;
     const file = req.files.file;
     console.log('req.fields',req.fields);
     console.log('req.files.file',req.files.file);
-    console.log('req.params', req.params);
-
-    const parseName = file.path.replace(/\\/g, '&#92;');
-    const newNameFile = parseName.split('&#92;').slice(-1)[0];
-    console.log('newName', newNameFile);
-    const fileNameExt = newNameFile.split('.').slice(-1)[0];
-    console.log('fileNameExt', fileNameExt);
+    // console.log('req.params', req.params);
 
     const authorPattern = new RegExp('^[a-zA-Z0-9][a-zA-Z0-9_.-]+@[a-zA-Z0-9][a-zA-Z0-9_.-]+\.{1,3}[a-zA-Z]{2,4}');
     const contentPattern = new RegExp(/(.)*/, 'g');
@@ -133,19 +130,36 @@ router.put(`/posts/:id/edit`, async (req, res) => {
     }
 
     if((authorMatched.length == author.length) && (titleMatched.length == title.length) && (textMatched.length == text.length)) {
+      let newNameFile;
+      let fileNameExt;
+      let newNamePhoto;
+      if(file !== undefined) {
+        const parseName = file.path.replace(/\\/g, '&#92;');
+        newNameFile = parseName.split('&#92;').slice(-1)[0];
+      }
+      if(newNameFile !== undefined) {
+        fileNameExt = newNameFile.split('.').slice(-1)[0];
+        newNamePhoto = newNameFile;
+      } else {
+        newNamePhoto = photo;
+        fileNameExt = photo.split('.').slice(-1)[0];
+      }
+      // console.log('fileNameExt', fileNameExt);
+      // console.log('newNamePhoto', newNamePhoto);
+
       if(fileNameExt == 'jpg' || fileNameExt == 'png' || fileNameExt == 'gif') {
         const editedPost = await(Post.findById(req.fields._id));
         console.log('editedPost',editedPost);
         if(editedPost) {
-          const changedPost = await (Post.updateOne({ _id: req.fields._id }, {$set: { title, text, author, created, updated, status, photo: newNameFile, price, phone, location }}));
-          console.log('changedPost', changedPost);
+          const changedPost = await (Post.updateOne({ _id: req.fields._id }, {$set: { title, text, author, status, created, updated, photo: newNamePhoto, price, phone, location }}));
           res.json(changedPost);
         }
         else {
           throw new Error('Something wrong!');
         }
       }
-
+    } else {
+      throw new Error('Something wrong!');
     }
   }
   catch(err) {
