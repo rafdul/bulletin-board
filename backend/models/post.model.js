@@ -11,6 +11,8 @@ const postSchema = new mongoose.Schema({
   price: { type: Number },
   phone: { type: String },
   location: { type: String },
+
+  file: { type: String },
 });
 
 module.exports = mongoose.model('Post', postSchema);

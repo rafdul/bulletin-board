@@ -2,8 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const mongoose = require('mongoose');
-const formidable = require('express-formidable');
-const uniqid = require('uniqid');
+// const formidable = require('express-formidable');
+// const uniqid = require('uniqid');
 
 const postsRoutes = require('./routes/posts.routes');
 
@@ -14,17 +14,18 @@ const app = express();
 /* MIDDLEWARE */
 app.use(cors());
 
-app.use(formidable({ uploadDir: '/uploads/' }, [{
-  event: 'fileBegin',
-  action: (req, res, next, name, file) => {
-    const fileName = 'photo_' + uniqid() + '.' + file.name.split('.')[1];
+// express-formidable jako alternatywa dla multera
+// app.use(formidable({ uploadDir: '/uploads/' }, [{
+//   event: 'fileBegin',
+//   action: (req, res, next, name, file) => {
+//     const fileName = 'photo_' + uniqid() + '.' + file.name.split('.')[1];
 
-    // file.path = __dirname + '/uploads/photo_' + fileName;
-    file.path = path.join(__dirname, '../public/uploads/') + fileName;
-    console.log('dirname w server2', __dirname);
-    console.log('file.path', file.path);
-  }},
-]));
+//     // file.path = __dirname + '/uploads/photo_' + fileName;
+//     file.path = path.join(__dirname, '../public/uploads/') + fileName;
+//     console.log('dirname w server2', __dirname);
+//     console.log('file.path', file.path);
+//   }},
+// ]));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -41,6 +42,7 @@ app.use('/api', (req, res) => {
 
 
 /* REACT WEBSITE */
+app.use(express.static(path.join(__dirname, '../uploads')));
 app.use(express.static(path.join(__dirname, '../public/')));
 app.use(express.static(path.join(__dirname, '../build')));
 app.use('*', (req, res) => {
