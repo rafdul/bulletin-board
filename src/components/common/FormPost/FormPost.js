@@ -87,23 +87,23 @@ class Component extends React.Component {
                       values.created = new Date().toISOString();
                       values.updated = values.created;
                       const formData = new FormData();
-                      for (let key of ['_id', 'title', 'text', 'price', 'photo', 'author', 'location', 'phone', 'status', 'created', 'updated']) {
+                      for (let key of ['_id','title', 'text', 'price', 'photo', 'author', 'location', 'phone', 'status', 'created', 'updated']) {
                         formData.append(key, values[key]);
                       }
-                      console.log('values w add', values);
+                      // console.log('values w add', values);
                       formData.append('file', values.file);
                       addPost(formData);
-                      console.log('formData w add', formData);
+                      // console.log('formData w add', formData);
                     } else {
                       values.updated = new Date().toISOString();
                       const formData = new FormData();
                       for (let key of ['_id', 'title', 'text', 'price', 'photo', 'author', 'location', 'phone', 'status', 'created', 'updated']) {
                         formData.append(key, values[key]);
                       }
-                      console.log('values w edit', values);
+                      // console.log('values w edit', values);
                       formData.append('file', values.file);
                       editPost(formData);
-                      console.log('formData w add', formData);
+                      // console.log('formData w add', formData);
                     }
                   }}
                   validationSchema={Yup.object().shape({
@@ -121,6 +121,7 @@ class Component extends React.Component {
                     phone: Yup.number()
                       .positive()
                       .integer(),
+                    status: Yup.string().required(),
                   })}
                 >
                   {({ handleChange, setFieldValue, errors, touched, values }) => (
@@ -130,7 +131,6 @@ class Component extends React.Component {
                       </Typography>
                       <Grid item xs={12} sm={9} className={styles.paperCard__item}>
                         <TextField
-                          required
                           name="title"
                           id="title"
                           label="Title"
@@ -143,7 +143,6 @@ class Component extends React.Component {
                       </Grid>
                       <Grid item xs={12} sm={9} className={styles.paperCard__item}>
                         <TextField
-                          required
                           name="text"
                           id="text"
                           label="Describe"
@@ -157,7 +156,6 @@ class Component extends React.Component {
                       </Grid>
                       <Grid item xs={12} sm={9} className={styles.paperCard__item}>
                         <TextField
-                          required
                           name="price"
                           id="price"
                           label="Price ($)"
@@ -170,7 +168,6 @@ class Component extends React.Component {
                       </Grid>
                       <Grid item xs={12} sm={9} className={styles.paperCard__item}>
                         <TextField
-                          required
                           type="email"
                           name="author"
                           id="author"
@@ -205,14 +202,16 @@ class Component extends React.Component {
                         />
                       </Grid>
                       <Grid item xs={12} sm={9} className={styles.paperCard__item}>
-                        <FormControl required fullWidth variant="filled">
+                        <FormControl fullWidth variant="filled">
                           <InputLabel id="demo-simple-select-label">Status</InputLabel>
                           <Select
                             labelId="demo-simple-select-label"
                             fullWidth
                             name="status"
+                            id="name"
                             value={values.status}
                             onChange={handleChange}
+                            error={errors.status && touched.status ? true : false}
                           >
                             <MenuItem value="draft">Draft</MenuItem>
                             <MenuItem value="published">Published</MenuItem>
@@ -253,26 +252,14 @@ class Component extends React.Component {
                       </Grid>
                     </Form>
                   )}
-
-
                 </Formik>
 
-                {(loading && loading.addOnePost) &&
+                {(loading && loading.changePost) &&
                   <Snackbar
                     open={open}
                     autoHideDuration={6000}
                     onClose={this.handleClose}
-                    message="Your post was added"
-                    TransitionComponent={transition}
-                    className={styles.snackbarr__success}
-                  />
-                }
-                {(loading && loading.editOnePost) &&
-                  <Snackbar
-                    open={open}
-                    autoHideDuration={6000}
-                    onClose={this.handleClose}
-                    message="Your post was edited"
+                    message="Well done! Congratulations!"
                     TransitionComponent={transition}
                     className={styles.snackbarr__success}
                   />
@@ -287,6 +274,7 @@ class Component extends React.Component {
                     className={styles.snackbarr__error}
                   />
                 }
+
               </Paper>
               :
               <NotFound />

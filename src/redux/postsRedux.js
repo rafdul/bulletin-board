@@ -149,7 +149,7 @@ export const reducer = (statePart = [], action = {}) => {
         loading: {
           active: false,
           error: false,
-          addOnePost: true,
+          changePost: true,
         },
         data: [...statePart.data, action.payload],
       };
@@ -164,7 +164,7 @@ export const reducer = (statePart = [], action = {}) => {
         loading: {
           active: false,
           error: false,
-          editOnePost: true,
+          changePost: true,
         },
         data: [...statePart.data],
       };

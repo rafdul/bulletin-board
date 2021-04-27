@@ -14,6 +14,7 @@ import LinkUI from '@material-ui/core/Link';
 import Fab from '@material-ui/core/Fab';
 
 import clsx from 'clsx';
+import uniqid from 'uniqid';
 
 import { connect } from 'react-redux';
 import { getAll, fetchPublished } from '../../../redux/postsRedux';
@@ -47,7 +48,8 @@ class Component extends React.Component {
         </div>
         <div className={styles.card}>
           {postsAll.map(post => (
-            <div key={post._id} className={styles.card__item}>
+            <div key={post._id ? post._id : uniqid()} className={styles.card__item}>
+              {/* {console.log('key:', post._id)} */}
               <Card  className={styles.flex}>
                 <CardActionArea>
                   <Link to={`/post/${post._id}`} className={styles.link}>

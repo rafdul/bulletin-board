@@ -1,23 +1,21 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path');
 const Post = require('../models/post.model');
 
 
 const multer = require('multer');
-let renameImage ='';
+
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, './uploads/');
+    cb(null, path.join(__dirname, '../uploads'));
   },
   filename: function (req, file, cb) {
-    renameImage = Date.now() + '-' + file.originalname;
-    cb(null, renameImage);
-    return renameImage;
+    const nameImage = Date.now() + '-bulletin-board-' + file.originalname;
+    cb(null, nameImage);
   },
 });
-let upload = multer({ storage: storage });
-// console.log('upload w postroutes', upload);
-
+let upload = multer({ storage });
 
 router.get('/posts', async (req, res) => {
   try {
@@ -50,9 +48,8 @@ router.post('/posts/add', upload.single('file'), async (req, res) => {
   try {
 
     const { title, text, author, created, updated, status, photo, price, phone, location} = req.body;
-    const uploadFile = req.file;
+
     console.log('req.body', req.body);
-    console.log('req.file', uploadFile);
 
     const authorPattern = new RegExp('^[a-zA-Z0-9][a-zA-Z0-9_.-]+@[a-zA-Z0-9][a-zA-Z0-9_.-]+\.{1,3}[a-zA-Z]{2,4}');
     const contentPattern = new RegExp(/(.)*/, 'g');
@@ -76,20 +73,18 @@ router.post('/posts/add', upload.single('file'), async (req, res) => {
 
       let newNameFile = null;
       let fileNameExt = null;
-      // console.log('renameImage',renameImage);
 
-      if(uploadFile !== undefined) {
-        newNameFile = renameImage;
-        const filePath = uploadFile.path;
+      if(req.file !== undefined) {
+        newNameFile = req.file.filename;
+        const filePath = req.file.path;
         // console.log('filePath',filePath);
-        // const getExtFile = filePath.split('/').slice(-1)[0];
         fileNameExt = filePath.split('.').slice(-1)[0];
         if((fileNameExt !== 'jpg') && (fileNameExt !== 'png') && (fileNameExt !== 'gif')) {
           throw new Error('Wrong format file');
         }
       }
-      // console.log('newNameFile',newNameFile);
-      // console.log('fileNameExt',fileNameExt);
+      console.log('newNameFile',newNameFile);
+      console.log('fileNameExt',fileNameExt);
 
       const newPost = new Post({ title, text, author, created, updated, status, photo: newNameFile, price, phone, location});
       await newPost.save();
@@ -109,10 +104,8 @@ router.post('/posts/add', upload.single('file'), async (req, res) => {
 router.put(`/posts/:id/edit`, upload.single('file'), async (req, res) => {
   try {
     const { title, text, author, created, updated, status, photo, price, phone, location} = req.body;
-    const uploadFile = req.file;
+
     console.log('req.body', req.body);
-    console.log('req.file', uploadFile);
-    console.log('req.params', req.params);
 
     const authorPattern = new RegExp('^[a-zA-Z0-9][a-zA-Z0-9_.-]+@[a-zA-Z0-9][a-zA-Z0-9_.-]+\.{1,3}[a-zA-Z]{2,4}');
     const contentPattern = new RegExp(/(.)*/, 'g');
@@ -130,24 +123,24 @@ router.put(`/posts/:id/edit`, upload.single('file'), async (req, res) => {
     if(text.length < 20) {
       throw new Error('Too short text (min. 20 characters)');
     }
-    console.log('test1');
+    // console.log('test1');
 
     if((authorMatched.length == author.length) && (titleMatched.length == title.length) && (textMatched.length == text.length)) {
+
       let newNameFile = req.body.photo;
       let fileNameExt;
-      console.log('renameImage',renameImage);
 
-      if(uploadFile !== undefined) {
-        newNameFile = renameImage;
-        const filePath = uploadFile.path;
-        console.log('filePath',filePath);
+      if(req.file !== undefined) {
+        newNameFile = req.file.filename;
+        const filePath = req.file.path;
+        // console.log('filePath',filePath);
         fileNameExt = filePath.split('.').slice(-1)[0];
         if((fileNameExt !== 'jpg') && (fileNameExt !== 'png') && (fileNameExt !== 'gif')) {
           throw new Error('Wrong format file');
         }
       }
-      console.log('newNameFile',newNameFile);
-      console.log('fileNameExt',fileNameExt);
+      // console.log('newNameFile',newNameFile);
+      // console.log('fileNameExt',fileNameExt);
 
       const editedPost = await(Post.findById(req.body._id));
       console.log('editedPost',editedPost);
@@ -167,6 +160,11 @@ router.put(`/posts/:id/edit`, upload.single('file'), async (req, res) => {
     res.status(500).json(err);
   }
 });
+
+
+
+
+
 
 // wersja router.post z express-formidable
 // router.post('/posts/add', async (req, res) => {
